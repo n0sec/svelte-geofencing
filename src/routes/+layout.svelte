@@ -5,9 +5,13 @@
 
 <header>
     <title>Geofencing Test</title>
-    <nav class="bg-gray-700 drop-shadow-md px-6 mb-6 items-center align-middle grid grid-cols-2 h-14">
+    <nav class="bg-gray-700 drop-shadow-md px-6 mb-6 items-center align-middle grid grid-cols-2 h-14 gap-5">
         <h1 class="text-2xl heading-title"><a href="/">Geofencing Test</a></h1>
-        <a href="about" class="col-end-7">About</a>
+        <a href="about" class="col-end-4">About</a>
+        <div class="col-end-5">
+            <!-- TODO: Implement dark mode toggle-->
+            <input type="checkbox" name="darkMode" id="darkMode">
+        </div>
     </nav>
 </header>
 

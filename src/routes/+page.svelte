@@ -9,33 +9,52 @@
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
     });
+
+    let latitude: any;
+    let longitude: any;
+    let radius: any;
+    let note: any;
+    let color = "#ff0000";
+
+    function resetForm() {
+        latitude = "";
+        longitude = "";
+        radius = "";
+        note = "";
+        color = "#ff0000";
+    }
+        
 </script>
-<div class="container mx-auto flex h-[82vh]">
-    <form action="post" class="mx-6">
+<div class="container mx-auto md:flex h-[82vh]">
+    <form method="post" class="mx-6">
         <div class="rounded-md shadow-sm">
             <label for="latitude" class="text-sm font-medium text-gray-400 block">Latitude:</label>
-            <input type="text" id="latitude" name="latitude" placeholder="51.505" class="rounded-md shadow-sm px-3 py-1 text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500" required>
+            <input type="text" bind:value={latitude} id="latitude" name="latitude" placeholder="51.505" class="rounded-md shadow-sm px-3 py-1 text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500" required>
         </div>
 
         <div class="rounded-md shadow-sm mt-3">
             <label for="longitude" class="text-sm font-medium text-gray-400 block">Longitude:</label>
-            <input type="text" id="longitude" name="longitude" placeholder="-35.603" class="rounded-md shadow-sm px-3 py-1 text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500" required>
+            <input type="text" bind:value={longitude} id="longitude" name="longitude" placeholder="-35.603" class="rounded-md shadow-sm px-3 py-1 text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500" required>
         </div>
 
         <div class="rounded-md shadow-sm mt-3">
             <label for="radius" class="text-sm font-medium text-gray-400 block">Radius:</label>
-
-            <input type="text" id="radius" name="radius" placeholder="200" class="rounded-md shadow-sm px-3 py-1 text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500" required>
+            <input type="text" bind:value={radius} id="radius" name="radius" placeholder="200" class="rounded-md shadow-sm px-3 py-1 text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500" required>
         </div>
 
         <div class="rounded-md shadow-sm mt-3">
             <label for="note" class="text-sm font-medium text-gray-400 block">Note:</label>
-            <input type="text" id="note" name="note" placeholder="Known Place" class="rounded-md shadow-sm px-3 py-1 text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500">
+            <input type="text" bind:value={note} id="note" name="note" placeholder="Known Place" class="rounded-md shadow-sm px-3 py-1 text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500">
+        </div>
+
+        <div class="rounded-md shadow-sm mt-3">
+            <label for="color" class="text-sm font-medium text-gray-400 block">Color:</label>
+            <input type="color" bind:value={color} id="color" name="color" class="rounded-md shadow-sm px-3 w-full py-1 text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500">
         </div>
 
         <div class="items-center justify-center align-middle">
             <input type="submit" value="Plot" class="bg-gray-600 rounded-full shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer">
-            <input type="reset" value="Reset" class="bg-gray-600 rounded-full shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer">
+            <button type="button" on:click={resetForm} value="Reset" class="bg-gray-600 rounded-full shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer">Reset</button>
             <button type="button" value="Clear Map" name="clearMap" class="bg-gray-600 rounded-full shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer">Clear Map</button>
 
         </div>

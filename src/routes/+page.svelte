@@ -1,6 +1,5 @@
 <script lang="ts">
     import {onMount} from 'svelte';
-    import L from 'leaflet';
 
     onMount(async () => {
         const L  = await import('leaflet');

@@ -17,28 +17,28 @@
             <input type="text" id="latitude" name="latitude" placeholder="Latitude" class="rounded-md shadow-sm px-3 py-1 text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500" required>
         </div>
 
-        <div class="rounded-md shadow-sm ">
+        <div class="rounded-md shadow-sm mt-3">
             <label for="longitude" class="text-sm font-medium text-gray-400 block">Longitude:</label>
             <input type="text" id="longitude" name="longitude" placeholder="Longitude" class="rounded-md shadow-sm px-3 py-1 text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500" required>
         </div>
 
-        <div class="rounded-md shadow-sm ">
+        <div class="rounded-md shadow-sm mt-3">
             <label for="radius" class="text-sm font-medium text-gray-400 block">Radius:</label>
 
             <input type="text" id="radius" name="radius" placeholder="Radius" class="rounded-md shadow-sm px-3 py-1 text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500" required>
         </div>
 
-        <div class="rounded-md shadow-sm ">
+        <div class="rounded-md shadow-sm mt-3">
             <label for="note" class="text-sm font-medium text-gray-400 block">Note:</label>
             <input type="text" id="note" name="note" placeholder="Note" class="rounded-md shadow-sm px-3 py-1 text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500">
         </div>
 
         <div class="items-center justify-center align-middle">
-            <input type="submit" value="Plot" class="bg-gray-600 rounded-full shadow-sm hover:bg-gray-700 px-4 cursor-pointer">
+            <input type="submit" value="Plot" class="bg-gray-600 rounded-full shadow-sm hover:bg-gray-700 px-4 w-full mt-6 cursor-pointer">
         </div>
     </form>   
-    <div class="grid auto-cols-max h-full w-full mt-6 overflow-hidden">
-        <div id="map" class="overflow-hidden h-full w-full"></div>
+    <div class="flex mt-6 w-full h-full overflow-hidden">
+        <div id="map" class="overflow-hidden flex"></div>
     </div>
 </div>
 

@@ -41,7 +41,3 @@ a:hover {
 p {
 	@apply leading-relaxed;
 }
-
-#map {
-	height: 100%;
-}

@@ -10,7 +10,7 @@
         }).addTo(map);
     });
 </script>
-<div class="container mx-auto">
+<div class="container mx-auto h-screen">
     <form action="post" class="grid grid-flow-col cols-auto items-center justify-evenly">
         <div class="rounded-md shadow-sm">
             <label for="latitude" class="text-sm font-medium text-gray-400 block">Latitude:</label>
@@ -36,13 +36,13 @@
         <div class="items-center justify-center align-middle">
             <input type="submit" value="Plot" class="bg-gray-600 rounded-full shadow-sm hover:bg-gray-700 px-4 cursor-pointer">
         </div>
-    </form>      
+    </form>  
+    <div class="mt-6 h-3/4 overflow-hidden">
+        <div id="map" class="overflow-hidden h-full w-full"></div>
+    </div>
+        
 </div>
 
-<div class="container mx-auto mt-10">
-    <h1>Placeholder for Map</h1>
-    <div id="map" class="overflow-hidden"></div>
-</div>
 
 <svelte:head>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"

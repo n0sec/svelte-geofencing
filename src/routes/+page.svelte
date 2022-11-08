@@ -10,8 +10,8 @@
         }).addTo(map);
     });
 </script>
-<div class="container mx-auto h-screen">
-    <form action="post" class="grid grid-flow-col cols-auto items-center justify-evenly">
+<div class="container mx-auto grid grid-flow-col auto-cols-min">
+    <form action="post" class="">
         <div class="rounded-md shadow-sm">
             <label for="latitude" class="text-sm font-medium text-gray-400 block">Latitude:</label>
             <input type="text" id="latitude" name="latitude" placeholder="Latitude" class="rounded-md shadow-sm px-3 py-1 text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500" required>
@@ -36,12 +36,13 @@
         <div class="items-center justify-center align-middle">
             <input type="submit" value="Plot" class="bg-gray-600 rounded-full shadow-sm hover:bg-gray-700 px-4 cursor-pointer">
         </div>
-    </form>  
-    <div class="mt-6 h-3/4 overflow-hidden">
+    </form>   
+    <div class="grid auto-cols-max h-full w-full mt-6 overflow-hidden">
         <div id="map" class="overflow-hidden h-full w-full"></div>
     </div>
-        
 </div>
+
+
 
 
 <svelte:head>

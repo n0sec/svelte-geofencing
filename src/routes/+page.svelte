@@ -1,6 +1,8 @@
 <script lang="ts">
     import type { PageData } from './$types';
-    export let data: PageData;
+    import L from 'leaflet';
+
+    const map = L.map('map').setView([51.505, -0.09], 13);
 </script>
 <div class="container mx-auto">
     <form action="post" class="grid grid-flow-col cols-auto items-center justify-evenly">
@@ -33,9 +35,14 @@
 
 <div class="container mx-auto mt-10">
     <h1>Placeholder for Map</h1>
-    <div id="map"></div>
+    <div id="map" class="overflow-hidden"></div>
 </div>
 
 <svelte:head>
-    <script src={data.mapUrl} defer></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
+    integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
+    integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="
+    crossorigin="" defer></script>
 </svelte:head>

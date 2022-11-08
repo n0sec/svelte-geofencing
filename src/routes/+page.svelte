@@ -1,8 +1,15 @@
 <script lang="ts">
-    import type { PageData } from './$types';
+    import {onMount} from 'svelte';
     import L from 'leaflet';
 
-    const map = L.map('map').setView([51.505, -0.09], 13);
+    onMount(async () => {
+        const L  = await import('leaflet');
+        const map = L.map('map').setView([51.505, -0.09], 13);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+    });
 </script>
 <div class="container mx-auto">
     <form action="post" class="grid grid-flow-col cols-auto items-center justify-evenly">
@@ -44,5 +51,5 @@
     crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
     integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="
-    crossorigin="" defer></script>
+    crossorigin=""></script>
 </svelte:head>

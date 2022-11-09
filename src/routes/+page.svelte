@@ -1,17 +1,23 @@
 <script lang="ts">
     import {onMount} from 'svelte';
+    let L: typeof import('leaflet');
+    let map: L.Map;
+    
+    // function loadMap(node) {
+    //     map = L.map('map').setView([51.505, -0.09], 13);
+    //     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //         maxZoom: 19,
+    //         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    //     }).addTo(map);
+    // }
 
     onMount(async () => {
         const L  = await import('leaflet');
-        const map = L.map('map').setView([51.505, -0.09], 13);
+        map = L.map('map').setView([51.505, -0.09], 13);
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
-
-        function plotCircle() {
-            console.log("Testing plot function");
-        }
     });
 
     let latitude: any;
@@ -19,6 +25,11 @@
     let radius: any;
     let note: any;
     let color = "#ff0000";
+
+    function plot() {
+        L.circle([latitude, longitude], {color: color, radius: radius}).addTo(map);
+        console.log(latitude, longitude);
+    }
 
     function resetForm() {
         latitude = "";
@@ -29,7 +40,7 @@
     }
         
 </script>
-<div class=" md:flex h-[82vh] mx-6">
+<div class=" md:flex h-[88vh] mx-6">
     <form method="post" class="mx-6">
         <div class="rounded-md shadow-sm">
             <label for="latitude" class="text-sm font-medium text-gray-400 block">Latitude:</label>
@@ -57,7 +68,7 @@
         </div>
 
         <div class="items-center justify-center align-middle">
-            <input type="submit" value="Plot" class="bg-gray-600 rounded-full text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer">
+            <input type="submit" on:click|preventDefault={plot} value="Plot" class="bg-gray-600 rounded-full text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer">
             <button type="button" on:click={resetForm} value="Reset" class="bg-gray-600 rounded-full text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer">Reset</button>
             <button type="button" value="Clear Map" name="clearMap" class="bg-gray-600 rounded-full text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer">Clear Map</button>
 

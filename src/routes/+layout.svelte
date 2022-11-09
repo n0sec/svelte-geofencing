@@ -22,9 +22,9 @@
 <main>
     <slot></slot>
 </main>
-<div class="absolute bottom-0 w-full bg-gray-700 px-6 items-center align-middle grid grid-cols-2 h-14 drop-shadow-md">
+<!-- <div class="absolute bottom-0 w-full bg-gray-700 px-6 items-center align-middle grid grid-cols-2 h-14 drop-shadow-md">
     <footer>&copy; {currentYear}</footer>
-</div>
+</div> -->
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');

@@ -2,13 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+	@apply leading-relaxed;
+}
+
 body {
 	@apply bg-neutral-800 text-neutral-100;
 }
 
 html {
 	font-family: 'Roboto', sans-serif;
-	@apply h-screen;
+	height: 100%;
 }
 
 h1,
@@ -36,8 +40,4 @@ nav a {
 
 a:hover {
 	@apply text-neutral-200;
-}
-
-p {
-	@apply leading-relaxed;
 }

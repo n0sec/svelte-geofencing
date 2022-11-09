@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import type { PlotCircle } from '$lib/types/PlotCircle';
 	let L: typeof import('leaflet');
 	let map: L.Map;
 
@@ -43,36 +43,35 @@
 		};
 	}
 
-	// onMount(async () => {
-	//     L  = await import('leaflet');
-	//     map = L.map('map').setView([51.505, -0.09], 13);
-	//     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-	//         maxZoom: 19,
-	//         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-	//     }).addTo(map);
-	// });
-
 	let latitude: any;
 	let longitude: any;
 	let radius: any;
 	let note: any;
 	let color = '#ff0000';
 
+	let plottedPoints: { plotCircle: PlotCircle }[];
+
 	/**
 	 * Draws a circle on the map from the entered coordinates
 	 * Sets the view to the coordinates
 	 */
 	function plot() {
+		// Draw the circle given the latitude, longitude, color and radius and add it to the map
 		L.circle([latitude, longitude], { color: color, radius: radius }).addTo(map);
+
+		// Set the current view to the latitude and longitude
 		map.setView([latitude, longitude]);
 	}
 
+	/**
+	 * Resets the form
+	 */
 	function resetForm() {
 		latitude = '';
 		longitude = '';
 		radius = '';
 		note = '';
-		color = '#ff0000';
+		color = '#ff0000'; // Leave this red as the default
 	}
 </script>
 
@@ -163,15 +162,21 @@
 			>
 		</div>
 	</form>
+	<table class="table-auto">
+		<thead>
+			<tr>
+				<th>Latitude</th>
+				<th>Longitude</th>
+				<th>Radius</th>
+				<th>Color</th>
+				<th>Note</th>
+			</tr>
+		</thead>
+	</table>
 	<div id="map" class="overflow-hidden flex w-full" use:loadMap />
 </div>
 
 <svelte:head>
-	<link
-		rel="stylesheet"
-		href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"
-	/>
-	<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 	<link
 		rel="stylesheet"
 		href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"

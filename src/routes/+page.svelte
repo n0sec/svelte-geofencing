@@ -56,7 +56,7 @@
 	 * Sets the view to the coordinates
 	 */
 	function plot(): void {
-		let plottedPoint: Required<PlotCircle> = {
+		let plottedPoint: PlotCircle = {
 			latitude: latitude,
 			longitude: longitude,
 			radius: radius,
@@ -70,10 +70,12 @@
 		}).addTo(map);
 
 		// Set the current view to the latitude and longitude
-		map.setView([plottedPoint.latitude, plottedPoint.longitude]);
+		map.setView([plottedPoint.latitude, plottedPoint.longitude]).setZoom(15);
 
 		plottedPoints.push(plottedPoint);
 	}
+
+	function clearMap(): void {}
 
 	/**
 	 * Resets the form
@@ -87,8 +89,8 @@
 	}
 </script>
 
-<div class="md:grid md:grid-cols-2 md:grid-rows-2 md:grid-flow-dense mx-6">
-	<form method="post" class="mx-6">
+<div class="md:grid md:grid-cols-5 md:grid-rows-2 md:grid-flow-dense md:gap-6 h-screen mx-6">
+	<form method="post" class="col-span-2 justify-self-center">
 		<div class="rounded-md shadow-sm">
 			<label for="latitude" class="text-sm font-medium text-gray-400 block">Latitude:</label>
 			<input
@@ -96,8 +98,8 @@
 				bind:value={latitude}
 				id="latitude"
 				name="latitude"
-				placeholder="51.505"
-				class="rounded-md shadow-sm text-sm px-3 py-1 text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
+				placeholder="28.582816"
+				class="rounded-md shadow-sm text-sm px-3 py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
 				required
 			/>
 		</div>
@@ -109,8 +111,8 @@
 				bind:value={longitude}
 				id="longitude"
 				name="longitude"
-				placeholder="-35.603"
-				class="rounded-md shadow-sm text-sm px-3 py-1 text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
+				placeholder="-81.339941"
+				class="rounded-md shadow-sm text-sm px-3 py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
 				required
 			/>
 		</div>
@@ -123,7 +125,7 @@
 				id="radius"
 				name="radius"
 				placeholder="200"
-				class="rounded-md shadow-sm text-sm px-3 py-1 text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
+				class="rounded-md shadow-sm text-sm px-3 py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
 				required
 			/>
 		</div>
@@ -136,7 +138,7 @@
 				id="note"
 				name="note"
 				placeholder="Known Place"
-				class="rounded-md shadow-sm text-sm px-3 py-1 text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
+				class="rounded-md shadow-sm text-sm px-3 py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
 			/>
 		</div>
 
@@ -147,7 +149,7 @@
 				bind:value={color}
 				id="color"
 				name="color"
-				class="rounded-md shadow-sm text-sm px-3 w-full py-1 text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
+				class="rounded-md shadow-sm text-sm px-3 py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
 			/>
 		</div>
 
@@ -174,18 +176,22 @@
 			>
 		</div>
 	</form>
-	<table class="table-auto col-start-1">
-		<thead>
-			<tr>
-				<th>Latitude</th>
-				<th>Longitude</th>
-				<th>Radius</th>
-				<th>Color</th>
-				<th>Note</th>
-			</tr>
-		</thead>
-	</table>
-	<div id="map" class="overflow-hidden row-span-2" use:loadMap />
+	<div
+		class="overflow-x-auto relative md:rounded-tl-md md:rounded-tr-md col-start-1 col-span-2 self-start border"
+	>
+		<table class="w-full text-sm table-auto border-collapse">
+			<thead>
+				<tr>
+					<th class="border-zinc-500 py-2" scope="col">Latitude</th>
+					<th class="border-zinc-500 py-2" scope="col">Longitude</th>
+					<th class="border-zinc-500 py-2" scope="col">Radius</th>
+					<th class="border-zinc-500 py-2" scope="col">Color</th>
+					<th class="border-zinc-500 py-2" scope="col">Note</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+	<div id="map" class="overflow-hidden col-span-3 row-span-2" use:loadMap />
 </div>
 
 <svelte:head>

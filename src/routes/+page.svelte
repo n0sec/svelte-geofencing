@@ -56,7 +56,7 @@
 	 * Sets the view to the coordinates
 	 */
 	function plot(): void {
-		let plottedPoint: PlotCircle = {
+		let plottedPoint: Required<PlotCircle> = {
 			latitude: latitude,
 			longitude: longitude,
 			radius: radius,
@@ -87,7 +87,7 @@
 	}
 </script>
 
-<div class=" md:flex h-[88vh] mx-6">
+<div class="md:grid md:grid-cols-2 md:grid-rows-2 md:grid-flow-dense mx-6">
 	<form method="post" class="mx-6">
 		<div class="rounded-md shadow-sm">
 			<label for="latitude" class="text-sm font-medium text-gray-400 block">Latitude:</label>
@@ -174,7 +174,7 @@
 			>
 		</div>
 	</form>
-	<table class="table-auto">
+	<table class="table-auto col-start-1">
 		<thead>
 			<tr>
 				<th>Latitude</th>
@@ -185,7 +185,7 @@
 			</tr>
 		</thead>
 	</table>
-	<div id="map" class="overflow-hidden flex w-full" use:loadMap />
+	<div id="map" class="overflow-hidden row-span-2" use:loadMap />
 </div>
 
 <svelte:head>

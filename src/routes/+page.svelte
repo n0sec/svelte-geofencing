@@ -49,24 +49,36 @@
 	let note: any;
 	let color = '#ff0000';
 
-	let plottedPoints: { plotCircle: PlotCircle }[];
+	let plottedPoints: PlotCircle[];
 
 	/**
 	 * Draws a circle on the map from the entered coordinates
 	 * Sets the view to the coordinates
 	 */
-	function plot() {
+	function plot(): void {
+		let plottedPoint: PlotCircle = {
+			latitude: latitude,
+			longitude: longitude,
+			radius: radius,
+			color: color,
+			note: note
+		};
 		// Draw the circle given the latitude, longitude, color and radius and add it to the map
-		L.circle([latitude, longitude], { color: color, radius: radius }).addTo(map);
+		L.circle([plottedPoint.latitude, plottedPoint.longitude], {
+			color: plottedPoint.color,
+			radius: plottedPoint.radius
+		}).addTo(map);
 
 		// Set the current view to the latitude and longitude
-		map.setView([latitude, longitude]);
+		map.setView([plottedPoint.latitude, plottedPoint.longitude]);
+
+		plottedPoints.push(plottedPoint);
 	}
 
 	/**
 	 * Resets the form
 	 */
-	function resetForm() {
+	function resetForm(): void {
 		latitude = '';
 		longitude = '';
 		radius = '';

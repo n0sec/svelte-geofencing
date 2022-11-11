@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { PlotCircle } from '$lib/types/PlotCircle';
+	import { point } from 'leaflet';
 	let L: typeof import('leaflet');
 	let map: L.Map;
 
@@ -8,11 +9,11 @@
 		L = await import('leaflet');
 
 		// Create the Google Sat Layer
-		let googleSatLayer = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-			maxZoom: 20,
-			attribution: '&copy; <a href="https://google.com">Google</a>',
-			subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-		});
+		// let googleSatLayer = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+		// 	maxZoom: 20,
+		// 	attribution: '&copy; <a href="https://google.com">Google</a>',
+		// 	subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+		// });
 
 		// Create the OpenStreet Tile Layer
 		let openStreetLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -24,12 +25,12 @@
 		map = L.map('map', {
 			center: [42.614689, -71.324092],
 			zoom: 15,
-			layers: [googleSatLayer, openStreetLayer]
+			layers: [openStreetLayer]
 		});
 
 		// Create the Layer Names in UI
 		let baseMaps = {
-			'Google Satelite': googleSatLayer,
+			// 'Google Satelite': googleSatLayer,
 			'Open Street Map': openStreetLayer
 		};
 
@@ -49,7 +50,7 @@
 	let note: any;
 	let color = '#ff0000';
 
-	let plottedPoints: PlotCircle[];
+	let plottedPoints: PlotCircle[] = [];
 
 	/**
 	 * Draws a circle on the map from the entered coordinates
@@ -73,6 +74,7 @@
 		map.setView([plottedPoint.latitude, plottedPoint.longitude]).setZoom(15);
 
 		plottedPoints.push(plottedPoint);
+		console.log(plottedPoints);
 	}
 
 	function clearMap(): void {}
@@ -89,7 +91,7 @@
 	}
 </script>
 
-<div class="md:grid md:grid-cols-5 md:grid-rows-2 md:grid-flow-dense md:gap-6 h-screen mx-6">
+<div class="md:grid md:grid-cols-5 md:grid-rows-2 md:grid-flow-dense md:gap-6 mx-6">
 	<form method="post" class="col-span-2 justify-self-center">
 		<div class="rounded-md shadow-sm">
 			<label for="latitude" class="text-sm font-medium text-gray-400 block">Latitude:</label>
@@ -189,6 +191,17 @@
 					<th class="border-zinc-500 py-2" scope="col">Note</th>
 				</tr>
 			</thead>
+			<tbody>
+				{#each plottedPoints as { latitude, longitude, radius, note, color }}
+					<tr>
+						<td>{latitude}</td>
+						<td>{longitude}</td>
+						<td>{radius}</td>
+						<td>{note}</td>
+						<td>{color}</td>
+					</tr>
+				{/each}
+			</tbody>
 		</table>
 	</div>
 	<div id="map" class="overflow-hidden col-span-3 row-span-2" use:loadMap />

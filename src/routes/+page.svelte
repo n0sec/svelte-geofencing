@@ -43,11 +43,12 @@
 		};
 	}
 
-	let latitude: any;
-	let longitude: any;
-	let radius: any;
-	let note: any;
-	let color = '#ff0000';
+	// Define the values used in the bind for the inputs
+	let latitude: number | string;
+	let longitude: number | string;
+	let radius: number | string;
+	let note: string;
+	let color: string = '#ff0000';
 
 	let plottedPoints: PlotCircle[] = [];
 
@@ -61,11 +62,11 @@
 	 */
 	function plot(): void {
 		let plottedPoint: PlotCircle = {
-			latitude: latitude,
-			longitude: longitude,
-			radius: radius,
-			color: color,
-			note: note
+			latitude: latitude as number,
+			longitude: longitude as number,
+			radius: radius as number,
+			note: note,
+			color: color
 		};
 		// Draw the circle given the latitude, longitude, color and radius and add it to the map
 		L.circle([plottedPoint.latitude, plottedPoint.longitude], {
@@ -76,7 +77,16 @@
 		// Set the current view to the latitude and longitude
 		map.setView([plottedPoint.latitude, plottedPoint.longitude]).setZoom(15);
 
+		// Add the point to the plottedPoints Array
 		addPoint(plottedPoint);
+
+		// Add the plottedPoint to Local Storage
+		// This will be used to persist the data across refreshes
+		plottedPoints.forEach((point, index) => {
+			localStorage.setItem(`${index}`, JSON.stringify(plottedPoint));
+		});
+
+		/* ! Debugging */
 		console.log(plottedPoints);
 	}
 
@@ -94,7 +104,9 @@
 	}
 </script>
 
-<div class="md:grid md:grid-cols-5 md:grid-rows-2 md:grid-flow-dense h-screen md:gap-6 mx-6">
+<div
+	class="md:grid md:grid-cols-5 md:grid-rows-2 md:grid-flow-dense h-screen md:gap-x-3 md:gap-y-28 mx-6"
+>
 	<form method="post" class="col-span-2 justify-self-center">
 		<div class="rounded-md shadow-sm">
 			<label for="latitude" class="text-sm font-medium text-gray-400 block">Latitude:</label>
@@ -169,6 +181,7 @@
 				type="button"
 				on:click={resetForm}
 				value="Reset Form"
+				name="resetForm"
 				class="bg-gray-600 rounded-full text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer"
 				>Reset Form</button
 			>
@@ -178,6 +191,13 @@
 				name="clearMap"
 				class="bg-gray-600 rounded-full text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer"
 				>Clear Map</button
+			>
+			<button
+				type="button"
+				value="Share"
+				name="share"
+				class="bg-gray-600 rounded-full text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer"
+				>Share</button
 			>
 		</div>
 	</form>
@@ -201,11 +221,7 @@
 						<td class="py-3 px-6">{longitude}</td>
 						<td class="py-3 px-6">{radius}</td>
 						<td class="py-3 px-6">{note ?? 'None'}</td>
-						<td class="py-3 px-6"
-							><span class="bg-color[{color}]"
-								>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span
-							></td
-						>
+						<td class="py-3 px-6">{color}</td>
 					</tr>
 				{/each}
 			</tbody>

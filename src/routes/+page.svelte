@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { PlotCircle } from '$lib/types/PlotCircle';
-	import { point } from 'leaflet';
 	let L: typeof import('leaflet');
 	let map: L.Map;
 
@@ -91,7 +90,7 @@
 	}
 </script>
 
-<div class="md:grid md:grid-cols-5 md:grid-rows-2 md:grid-flow-dense md:gap-6 mx-6">
+<div class="md:grid md:grid-cols-5 md:grid-rows-2 md:grid-flow-dense h-screen md:gap-6 mx-6">
 	<form method="post" class="col-span-2 justify-self-center">
 		<div class="rounded-md shadow-sm">
 			<label for="latitude" class="text-sm font-medium text-gray-400 block">Latitude:</label>
@@ -194,9 +193,9 @@
 			<tbody>
 				{#each plottedPoints as { latitude, longitude, radius, note, color }}
 					<tr>
-						<td>{latitude}</td>
-						<td>{longitude}</td>
-						<td>{radius}</td>
+						<td>{latitude.toString}</td>
+						<td>{longitude.toString}</td>
+						<td>{radius.toString}</td>
 						<td>{note}</td>
 						<td>{color}</td>
 					</tr>

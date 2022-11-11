@@ -51,6 +51,10 @@
 
 	let plottedPoints: PlotCircle[] = [];
 
+	function addPoint(point: PlotCircle) {
+		plottedPoints = [...plottedPoints, point];
+	}
+
 	/**
 	 * Draws a circle on the map from the entered coordinates
 	 * Sets the view to the coordinates
@@ -72,7 +76,7 @@
 		// Set the current view to the latitude and longitude
 		map.setView([plottedPoint.latitude, plottedPoint.longitude]).setZoom(15);
 
-		plottedPoints.push(plottedPoint);
+		addPoint(plottedPoint);
 		console.log(plottedPoints);
 	}
 
@@ -178,26 +182,30 @@
 		</div>
 	</form>
 	<div
-		class="overflow-x-auto relative md:rounded-tl-md md:rounded-tr-md col-start-1 col-span-2 self-start border"
+		class="overflow-x-auto relative md:rounded-tl-md md:rounded-tr-md col-start-1 col-span-2 self-start border border-gray-400"
 	>
-		<table class="w-full text-sm table-auto border-collapse">
-			<thead>
+		<table class="w-full text-sm table-auto border-collapse text-left">
+			<thead class="uppercase text-xs bg-gray-600">
 				<tr>
-					<th class="border-zinc-500 py-2" scope="col">Latitude</th>
-					<th class="border-zinc-500 py-2" scope="col">Longitude</th>
-					<th class="border-zinc-500 py-2" scope="col">Radius</th>
-					<th class="border-zinc-500 py-2" scope="col">Color</th>
-					<th class="border-zinc-500 py-2" scope="col">Note</th>
+					<th class="py-2 px-6" scope="col">Latitude</th>
+					<th class="py-2 px-6" scope="col">Longitude</th>
+					<th class="py-2 px-6" scope="col">Radius</th>
+					<th class="py-2 px-6" scope="col">Note</th>
+					<th class="py-2 px-6" scope="col">Color</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody class="text-sm">
 				{#each plottedPoints as { latitude, longitude, radius, note, color }}
-					<tr>
-						<td>{latitude.toString}</td>
-						<td>{longitude.toString}</td>
-						<td>{radius.toString}</td>
-						<td>{note}</td>
-						<td>{color}</td>
+					<tr class="text-sm bg-gray-700 border-b">
+						<td class="py-3 px-6">{latitude}</td>
+						<td class="py-3 px-6">{longitude}</td>
+						<td class="py-3 px-6">{radius}</td>
+						<td class="py-3 px-6">{note ?? 'None'}</td>
+						<td class="py-3 px-6"
+							><span class="bg-color[{color}]"
+								>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span
+							></td
+						>
 					</tr>
 				{/each}
 			</tbody>

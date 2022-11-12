@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
+	import { createStore } from '$lib/points';
 	import type { PlotCircle } from '$lib/types/PlotCircle';
 	let L: typeof import('leaflet');
 	let map: L.Map;
@@ -43,7 +45,11 @@
 		};
 	}
 
+	if (browser) {
+	}
 	// Define the values used in the bind for the inputs
+	// We need the Union Types here so that it plays nice in the script and in the UI
+	// The inputs render
 	let latitude: number | string;
 	let longitude: number | string;
 	let radius: number | string;
@@ -82,8 +88,8 @@
 
 		// Add the plottedPoint to Local Storage
 		// This will be used to persist the data across refreshes
-		plottedPoints.forEach((point, index) => {
-			localStorage.setItem(`${index}`, JSON.stringify(plottedPoint));
+		plottedPoints.forEach(($point, index) => {
+			createStore($point, index.toString());
 		});
 
 		/* ! Debugging */
@@ -175,28 +181,28 @@
 				type="submit"
 				on:click|preventDefault={plot}
 				value="Plot"
-				class="bg-gray-600 rounded-full text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer"
+				class="bg-gray-600 rounded-md text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer"
 			/>
 			<button
 				type="button"
 				on:click={resetForm}
 				value="Reset Form"
 				name="resetForm"
-				class="bg-gray-600 rounded-full text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer"
+				class="bg-gray-600 rounded-md text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer"
 				>Reset Form</button
 			>
 			<button
 				type="button"
 				value="Clear Map"
 				name="clearMap"
-				class="bg-gray-600 rounded-full text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer"
+				class="bg-gray-600 rounded-md text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer"
 				>Clear Map</button
 			>
 			<button
 				type="button"
 				value="Share"
 				name="share"
-				class="bg-gray-600 rounded-full text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer"
+				class="bg-gray-600 rounded-md text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer"
 				>Share</button
 			>
 		</div>

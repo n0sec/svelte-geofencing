@@ -218,6 +218,7 @@
 					<th class="py-2 px-6" scope="col">Radius</th>
 					<th class="py-2 px-6" scope="col">Note</th>
 					<th class="py-2 px-6" scope="col">Color</th>
+					<th />
 				</tr>
 			</thead>
 			<tbody class="text-sm">
@@ -228,6 +229,17 @@
 						<td class="py-3 px-6">{radius}</td>
 						<td class="py-3 px-6">{note ?? 'None'}</td>
 						<td class="py-3 px-6">{color}</td>
+						<td
+							><svg
+								width="20"
+								height="20"
+								viewBox="0 0 24 24"
+								class="fill-red-600 hover:fill-red-700"
+								><path
+									d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6Z"
+								/></svg
+							></td
+						>
 					</tr>
 				{/each}
 			</tbody>

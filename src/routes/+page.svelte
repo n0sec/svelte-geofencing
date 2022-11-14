@@ -3,6 +3,7 @@
 	import { createStore } from '$lib/points';
 	import type { PlotCircle } from '$lib/types/PlotCircle';
 	import { onDestroy, onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
 	let L: typeof import('leaflet');
 
 	let map: L.Map;
@@ -46,9 +47,9 @@
 	let longitude: number | string = 0;
 	let radius: number | string = 0;
 	let note: string = '';
-	let color: string = '#ff0000';
+	let color: string = '#FF0000';
 
-	// let pointStore = createStore({ latitude, longitude, radius, note, color }, 'Test');
+	let pointStore = createStore({ latitude, longitude, radius, note, color }, 'Test');
 
 	let plottedPoints: PlotCircle[] = [];
 
@@ -60,7 +61,13 @@
 	 * Draws a circle on the map from the entered coordinates
 	 * Sets the view to the coordinates
 	 */
-	function plot(): void {
+	function plot(): void | string {
+		// TODO: Return an error if any of the coordinates are missing
+		if (!latitude || !longitude || !radius) {
+			console.log('Error: Missing coordinates');
+			const message =
+				'Error: Missing coordinates or radius. Please enter the missing information and try again.';
+		}
 		let plottedPoint: PlotCircle = {
 			latitude: latitude as number,
 			longitude: longitude as number,
@@ -80,14 +87,11 @@
 		// Add the point to the plottedPoints Array
 		addPoint(plottedPoint);
 
-		// Add the plotted point to the store/localStorage
-		// pointStore.set(plottedPoint);
-
 		// Add the plottedPoint to Local Storage
 		// This will be used to persist the data across refreshes
-		// plottedPoints.forEach((point, index) => {
-		// 	pointStore.set(point);
-		// });
+		plottedPoints.forEach((point, index) => {
+			pointStore.set(index.toString(), point);
+		});
 
 		/* ! Debugging */
 		console.log(plottedPoints);
@@ -103,15 +107,22 @@
 		latitude = '';
 		longitude = '';
 		radius = '';
-		note = '';
+		note = 'None';
 		color = '#ff0000'; // Leave this red as the default
 	}
 </script>
 
+<!-- TODO: Implement error -->
 <div
-	class="md:grid md:grid-cols-5 md:grid-rows-2 md:grid-flow-dense h-screen md:gap-x-3 md:gap-y-28 mx-6"
+	class="error-banner pb-6 pl-6 mb-6 ml-6 mr-6 rounded-md bg-red-400/80"
+	transition:fade={{ delay: 250, duration: 300 }}
 >
-	<form method="post" class="col-span-2 justify-self-center">
+	Error
+</div>
+<div
+	class="md:grid md:grid-cols-5 md:grid-rows-3 md:grid-flow-dense h-screen md:gap-x-6 md:gap-y-10 mx-6"
+>
+	<form class="col-span-1 col-start-1 row-span-1 justify-self-center">
 		<div class="rounded-md shadow-sm">
 			<label for="latitude" class="text-sm font-medium text-gray-400 block">Latitude:</label>
 			<input
@@ -120,7 +131,7 @@
 				id="latitude"
 				name="latitude"
 				placeholder="28.582816"
-				class="rounded-md shadow-sm text-sm px-3 py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
+				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
 				required
 			/>
 		</div>
@@ -133,7 +144,7 @@
 				id="longitude"
 				name="longitude"
 				placeholder="-81.339941"
-				class="rounded-md shadow-sm text-sm px-3 py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
+				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
 				required
 			/>
 		</div>
@@ -146,7 +157,7 @@
 				id="radius"
 				name="radius"
 				placeholder="200"
-				class="rounded-md shadow-sm text-sm px-3 py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
+				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
 				required
 			/>
 		</div>
@@ -159,7 +170,7 @@
 				id="note"
 				name="note"
 				placeholder="Known Place"
-				class="rounded-md shadow-sm text-sm px-3 py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
+				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
 			/>
 		</div>
 
@@ -173,38 +184,45 @@
 				class="rounded-md shadow-sm text-sm px-3 py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
 			/>
 		</div>
-
-		<div class="items-center justify-center align-middle">
-			<input
-				type="submit"
-				on:click|preventDefault={plot}
-				value="Plot"
-				class="bg-gray-600 rounded-md text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer"
-			/>
-			<button
-				type="button"
-				on:click={resetForm}
-				value="Reset Form"
-				name="resetForm"
-				class="bg-gray-600 rounded-md text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer"
-				>Reset Form</button
-			>
-			<button
-				type="button"
-				value="Clear Map"
-				name="clearMap"
-				class="bg-gray-600 rounded-md text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer"
-				>Clear Map</button
-			>
-			<button
-				type="button"
-				value="Share"
-				name="share"
-				class="bg-gray-600 rounded-md text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-1 w-full mt-6 cursor-pointer"
-				>Share</button
-			>
-		</div>
 	</form>
+	<div class="col-start-2 row-span-1">
+		<button
+			type="submit"
+			on:click={plot}
+			value="Plot"
+			class="bg-gray-600 rounded-lg text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-3 cursor-pointer"
+			>Plot</button
+		>
+		<button
+			type="button"
+			on:click={resetForm}
+			value="Reset Form"
+			name="resetForm"
+			class="bg-gray-600 rounded-lg text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-6 cursor-pointer"
+			>Reset Form</button
+		>
+		<button
+			type="button"
+			value="Clear Map"
+			name="clearMap"
+			class="bg-gray-600 rounded-lg text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-6 cursor-pointer"
+			>Clear Map</button
+		>
+		<button
+			type="button"
+			value="Share"
+			name="share"
+			class="bg-blue-500 rounded-lg text-sm text-center shadow-sm hover:bg-blue-600 focus:ring-blue-400 focus:ring-2 py-2.5 w-full mt-6 cursor-pointer"
+		>
+			<svg viewBox="0 0 24 24" class="mr-2 w-4 h-4 inline" role="img"
+				><path
+					fill="currentColor"
+					d="M18 22q-1.25 0-2.125-.875T15 19q0-.175.025-.363q.025-.187.075-.337l-7.05-4.1q-.425.375-.95.587Q6.575 15 6 15q-1.25 0-2.125-.875T3 12q0-1.25.875-2.125T6 9q.575 0 1.1.212q.525.213.95.588l7.05-4.1q-.05-.15-.075-.337Q15 5.175 15 5q0-1.25.875-2.125T18 2q1.25 0 2.125.875T21 5q0 1.25-.875 2.125T18 8q-.575 0-1.1-.213q-.525-.212-.95-.587L8.9 11.3q.05.15.075.337Q9 11.825 9 12t-.025.362q-.025.188-.075.338l7.05 4.1q.425-.375.95-.588Q17.425 16 18 16q1.25 0 2.125.875T21 19q0 1.25-.875 2.125T18 22Z"
+				/></svg
+			>Share</button
+		>
+	</div>
+
 	<div
 		class="overflow-x-auto relative md:rounded-tl-md md:rounded-tr-md col-start-1 col-span-2 self-start border border-gray-400"
 	>
@@ -243,5 +261,5 @@
 			</tbody>
 		</table>
 	</div>
-	<div id="map" class="overflow-hidden col-span-3 row-span-2" bind:this={mapElement} />
+	<div id="map" class="overflow-hidden col-span-3 row-span-3" bind:this={mapElement} />
 </div>

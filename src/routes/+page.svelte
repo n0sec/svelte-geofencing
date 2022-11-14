@@ -4,13 +4,21 @@
 	import type { PlotCircle } from '$lib/types/PlotCircle';
 	import { onDestroy, onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
+	import type { PageData } from './$types';
 	let L: typeof import('leaflet');
 
 	let map: L.Map;
 	let mapElement: HTMLElement;
 
+	export let data: PageData;
+	let { points } = data;
+
 	onMount(async () => {
 		if (browser) {
+			// Clear local storage on mount
+			// This means that the user will need to plot their points over again every time they visit the page
+			// This shouldn't be a huge deal since thus really shouldn't be used to plot dozens or hundreds of points
+			window.localStorage.clear();
 			L = await import('leaflet');
 
 			let openStreetLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -114,10 +122,16 @@
 
 <!-- TODO: Implement error -->
 <div
-	class="error-banner pb-6 pl-6 mb-6 ml-6 mr-6 rounded-md bg-red-400/80"
+	class="error-banner pl-6 mb-6 ml-6 mr-6 h-14 bg-red-500/80 border-l-4 flex items-center align-center border-red-400/70"
 	transition:fade={{ delay: 250, duration: 300 }}
 >
-	Error
+	<p>
+		Error <svg viewBox="0 0 24 24" class="fill-neutral-100 inline cursor-pointer h-5 w-5"
+			><path
+				d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6Z"
+			/></svg
+		>
+	</p>
 </div>
 <div
 	class="md:grid md:grid-cols-5 md:grid-rows-3 md:grid-flow-dense h-screen md:gap-x-6 md:gap-y-10 mx-6"
@@ -238,19 +252,16 @@
 				</tr>
 			</thead>
 			<tbody class="text-sm">
+				<!-- TODO: Load from localStorage store -->
 				{#each plottedPoints as { latitude, longitude, radius, note, color }}
-					<tr class="text-sm bg-gray-700 border-b">
+					<tr class="text-sm bg-gray-700 border-b hover:bg-gray-800">
 						<td class="py-3 px-6">{latitude}</td>
 						<td class="py-3 px-6">{longitude}</td>
 						<td class="py-3 px-6">{radius}</td>
 						<td class="py-3 px-6">{note ?? 'None'}</td>
 						<td class="py-3 px-6">{color}</td>
 						<td
-							><svg
-								width="20"
-								height="20"
-								viewBox="0 0 24 24"
-								class="fill-red-600 hover:fill-red-700"
+							><svg viewBox="0 0 24 24" class="fill-red-500 cursor-pointer h-5 w-5"
 								><path
 									d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6Z"
 								/></svg

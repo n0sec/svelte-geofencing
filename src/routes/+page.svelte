@@ -2,59 +2,53 @@
 	import { browser } from '$app/environment';
 	import { createStore } from '$lib/points';
 	import type { PlotCircle } from '$lib/types/PlotCircle';
+	import { onDestroy, onMount } from 'svelte';
 	let L: typeof import('leaflet');
+
 	let map: L.Map;
+	let mapElement: HTMLElement;
 
-	async function loadMap(node: HTMLElement) {
-		// Import the library
-		L = await import('leaflet');
+	onMount(async () => {
+		if (browser) {
+			const leaflet = await import('leaflet');
 
-		// Create the Google Sat Layer
-		// let googleSatLayer = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-		// 	maxZoom: 20,
-		// 	attribution: '&copy; <a href="https://google.com">Google</a>',
-		// 	subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-		// });
+			let openStreetLayer = leaflet.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				maxZoom: 19,
+				attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+			});
 
-		// Create the OpenStreet Tile Layer
-		let openStreetLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-			maxZoom: 19,
-			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-		});
+			map = leaflet.map(mapElement, {
+				center: [42.614689, -71.324092],
+				zoom: 15,
+				layers: [openStreetLayer]
+			});
 
-		// Create the map
-		map = L.map('map', {
-			center: [42.614689, -71.324092],
-			zoom: 15,
-			layers: [openStreetLayer]
-		});
+			// Create the Layer Names in UI
+			let baseMaps = {
+				'Open Street Map': openStreetLayer
+			};
 
-		// Create the Layer Names in UI
-		let baseMaps = {
-			// 'Google Satelite': googleSatLayer,
-			'Open Street Map': openStreetLayer
-		};
+			leaflet.control.layers(baseMaps).addTo(map);
+		}
+	});
 
-		L.control.layers(baseMaps).addTo(map);
+	onDestroy(async () => {
+		if (map) {
+			console.log('Unloading Leaflet map.');
+			map.remove();
+		}
+	});
 
-		return {
-			destroy() {
-				// the node has been removed from the DOM
-				map.remove();
-			}
-		};
-	}
-
-	if (browser) {
-	}
 	// Define the values used in the bind for the inputs
 	// We need the Union Types here so that it plays nice in the script and in the UI
 	// The inputs render
-	let latitude: number | string;
-	let longitude: number | string;
-	let radius: number | string;
-	let note: string;
+	let latitude: number | string = 0;
+	let longitude: number | string = 0;
+	let radius: number | string = 0;
+	let note: string = '';
 	let color: string = '#ff0000';
+
+	// let pointStore = createStore({ latitude, longitude, radius, note, color }, 'Test');
 
 	let plottedPoints: PlotCircle[] = [];
 
@@ -86,16 +80,20 @@
 		// Add the point to the plottedPoints Array
 		addPoint(plottedPoint);
 
+		// Add the plotted point to the store/localStorage
+		// pointStore.set(plottedPoint);
+
 		// Add the plottedPoint to Local Storage
 		// This will be used to persist the data across refreshes
-		plottedPoints.forEach(($point, index) => {
-			createStore($point, index.toString());
-		});
+		// plottedPoints.forEach((point, index) => {
+		// 	pointStore.set(point);
+		// });
 
 		/* ! Debugging */
 		console.log(plottedPoints);
 	}
 
+	// TODO: Implement
 	function clearMap(): void {}
 
 	/**
@@ -245,10 +243,10 @@
 			</tbody>
 		</table>
 	</div>
-	<div id="map" class="overflow-hidden col-span-3 row-span-2" use:loadMap />
+	<div id="map" class="overflow-hidden col-span-3 row-span-2" bind:this={mapElement} />
 </div>
 
-<svelte:head>
+<!-- <svelte:head>
 	<link
 		rel="stylesheet"
 		href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
@@ -260,4 +258,4 @@
 		integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="
 		crossorigin=""
 	></script>
-</svelte:head>
+</svelte:head> -->

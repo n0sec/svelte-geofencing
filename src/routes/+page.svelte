@@ -10,14 +10,14 @@
 
 	onMount(async () => {
 		if (browser) {
-			const leaflet = await import('leaflet');
+			L = await import('leaflet');
 
-			let openStreetLayer = leaflet.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			let openStreetLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				maxZoom: 19,
 				attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 			});
 
-			map = leaflet.map(mapElement, {
+			map = L.map(mapElement, {
 				center: [42.614689, -71.324092],
 				zoom: 15,
 				layers: [openStreetLayer]
@@ -28,7 +28,7 @@
 				'Open Street Map': openStreetLayer
 			};
 
-			leaflet.control.layers(baseMaps).addTo(map);
+			L.control.layers(baseMaps).addTo(map);
 		}
 	});
 

@@ -2,7 +2,7 @@ import { writable } from 'svelte/store';
 import type { PlotCircle } from './types/PlotCircle';
 
 export function createStore(initialData: PlotCircle, key: string) {
-	const data = window.localStorage.getItem(key);
+	const data = typeof window !== 'undefined' ? window.localStorage.getItem(key) : null;
 
 	if (data) {
 		initialData = JSON.parse(data);
@@ -13,7 +13,7 @@ export function createStore(initialData: PlotCircle, key: string) {
 	return {
 		subscribe,
 
-		set(value: PlotCircle) {
+		set(key: string, value: PlotCircle) {
 			window.localStorage.setItem(key, JSON.stringify(value));
 			_set(value);
 		}

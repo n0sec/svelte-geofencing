@@ -1,7 +1,7 @@
 export interface PlotCircle {
-	latitude: number;
-	longitude: number;
-	radius: number;
+	latitude: number | string;
+	longitude: number | string;
+	radius: number | string;
 	color: string;
 	note?: string;
 }

@@ -8,11 +8,29 @@
 	import type { PageData } from './$types';
 	let L: typeof import('leaflet');
 
+	/* ! VARIABLE DEFINITIONS */
+
 	let map: L.Map;
 	let mapElement: HTMLElement;
 	let circleGroup: LayerGroup;
 
 	let errorVisible = true;
+
+	// Define the values used in the bind for the inputs
+	// We need the Union Types here so that it plays nice in the script and in the UI
+	// The inputs render
+	let latitude: number | string = '';
+	let longitude: number | string = '';
+	let radius: number | string = '';
+	let note: string = '';
+	let color: string = '#FF0000';
+
+	let pointStore = createStore({ latitude, longitude, radius, note, color }, 'Test');
+
+	let plottedPoints: PlotCircle[] = [];
+	let localStoragePoints: PlotCircle[] = [];
+
+	/***********************************************/
 
 	onMount(async () => {
 		if (browser) {
@@ -48,19 +66,6 @@
 			map.remove();
 		}
 	});
-
-	// Define the values used in the bind for the inputs
-	// We need the Union Types here so that it plays nice in the script and in the UI
-	// The inputs render
-	let latitude: number | string = '';
-	let longitude: number | string = '';
-	let radius: number | string = '';
-	let note: string = '';
-	let color: string = '#FF0000';
-
-	let pointStore = createStore({ latitude, longitude, radius, note, color }, 'Test');
-
-	let plottedPoints: PlotCircle[] = [];
 
 	function addPoint(point: PlotCircle) {
 		plottedPoints = [...plottedPoints, point];
@@ -124,6 +129,8 @@
 			// This will be used to persist the data across refreshes
 			plottedPoints.forEach((point, index) => {
 				pointStore.set(index.toString(), point);
+				localStoragePoints = getLocalStorageKeys();
+				console.log(localStoragePoints);
 			});
 		}
 	}
@@ -309,7 +316,7 @@
 			</thead>
 			<tbody class="text-sm">
 				<!-- TODO: Obtain points from localStorage and not the array -->
-				{#each plottedPoints as { latitude, longitude, radius, note, color }}
+				{#each localStoragePoints as { latitude, longitude, radius, note, color }}
 					<tr class="text-sm bg-gray-700 border-b hover:bg-gray-800">
 						<td class="py-3 px-6">{latitude}</td>
 						<td class="py-3 px-6">{longitude}</td>

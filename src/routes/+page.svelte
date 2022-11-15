@@ -71,10 +71,6 @@
 		plottedPoints = [...plottedPoints, point];
 	}
 
-	function myLocation(): void {
-		// TODO: Implement
-	}
-
 	function getLocalStorageKeys(): PlotCircle[] {
 		let points: PlotCircle[] = [];
 		if (browser) {
@@ -136,6 +132,7 @@
 	}
 
 	// TODO: Implement
+	// FIXME: Not removing records from the table
 	function clearAll(): void {
 		// Clear localStorage which should theoretically clear the store too lol
 		if (browser) {
@@ -159,6 +156,10 @@
 		radius = '';
 		note = 'None';
 		color = '#ff0000'; // Leave this red as the default
+	}
+
+	function myLocation(): void {
+		map.locate({ timeout: 500, setView: true, maxZoom: 18 }).setZoom(15);
 	}
 </script>
 

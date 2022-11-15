@@ -5,7 +5,6 @@
 	import type { LayerGroup } from 'leaflet';
 	import { onDestroy, onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import type { PageData } from './$types';
 	let L: typeof import('leaflet');
 
 	/* ! VARIABLE DEFINITIONS */
@@ -25,8 +24,10 @@
 	let note: string = '';
 	let color: string = '#FF0000';
 
+	// Create the point store
 	let pointStore = createStore({ latitude, longitude, radius, note, color }, 'Test');
 
+	// Initialize the plotted points array
 	let plottedPoints: PlotCircle[] = [];
 	let localStoragePoints: PlotCircle[] = [];
 
@@ -103,7 +104,7 @@
 
 			// Create a group for the circles
 			// We need this so when we clear the map later of layers, we only clear this layer
-			let circleGroup = L.featureGroup();
+			circleGroup = L.featureGroup();
 
 			// Draw the circle given the latitude, longitude, color and radius and add it to the map
 			L.circle([plottedPoint.latitude as number, plottedPoint.longitude as number], {
@@ -122,29 +123,16 @@
 			addPoint(plottedPoint);
 
 			// Add the point to the store which adds it to Local Storage
-			// This will be used to persist the data across refreshes
+			// Then refresh the localStoragePoints with what is in localStorage
+			// ?? Not sure this is the best way
 			plottedPoints.forEach((point, index) => {
 				pointStore.set(index.toString(), point);
 				localStoragePoints = getLocalStorageKeys();
-				console.log(localStoragePoints);
 			});
+
+			// console.log(`Plotted Points: ${JSON.stringify(plottedPoints)}`);
+			// console.log(`Local Storage: ${JSON.stringify(localStoragePoints)}`);
 		}
-	}
-
-	// TODO: Implement
-	// FIXME: Not removing records from the table
-	function clearAll(): void {
-		// Clear localStorage which should theoretically clear the store too lol
-		if (browser) {
-			window.localStorage.clear();
-
-			if (map.hasLayer(circleGroup)) {
-				map.removeLayer(circleGroup);
-			}
-		}
-
-		// Reset the form while we're at it for accessibility
-		resetForm();
 	}
 
 	/**
@@ -158,8 +146,30 @@
 		color = '#ff0000'; // Leave this red as the default
 	}
 
+	// ?? Really not sure if an array is best here or if we can do this right from the store but ¯\_(ツ)_/¯
+	function clearAll(): void {
+		// Clear localStorage which should theoretically clear the store too lol
+		if (browser) {
+			window.localStorage.clear();
+			localStoragePoints = [];
+			if (map.hasLayer(circleGroup)) {
+				map.removeLayer(circleGroup);
+			}
+		}
+
+		// Reset the form while we're at it for accessibility
+		resetForm();
+	}
+
 	function myLocation(): void {
 		map.locate({ timeout: 500, setView: true, maxZoom: 18 }).setZoom(15);
+	}
+
+	function handleCloseError(event: any) {
+		let key = event.key;
+		if (key == 'Esc') {
+			errorVisible = false;
+		}
 	}
 </script>
 
@@ -168,6 +178,7 @@
 	<div
 		class="error-banner pl-6 mb-6 ml-6 mr-6 h-14 bg-red-500/80 border-l-4 flex items-center justify-between border-red-400/70"
 		transition:fade={{ duration: 300 }}
+		on:keydown={handleCloseError}
 	>
 		<p class="text-sm inline-flex error">
 			<svg viewBox="0 0 24 24" class="h-5 w-5 mr-3"
@@ -178,7 +189,7 @@
 			>
 			Error
 		</p>
-		<button on:click={() => (errorVisible = false)} on:keypress>
+		<button on:click={() => (errorVisible = false)}>
 			<svg viewBox="0 0 24 24" class="fill-neutral-100 cursor-pointer mr-6 h-5 w-5"
 				><path
 					d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6Z"

@@ -2,7 +2,7 @@
 	import { browser } from '$app/environment';
 	import { createStore } from '$lib/points';
 	import type { PlotCircle } from '$lib/types/PlotCircle';
-	import type { FeatureGroup, LayerGroup } from 'leaflet';
+	import type { LayerGroup } from 'leaflet';
 	import { onDestroy, onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import type { PageData } from './$types';
@@ -10,10 +10,7 @@
 
 	let map: L.Map;
 	let mapElement: HTMLElement;
-	let circleGroup: FeatureGroup;
-
-	export let data: PageData;
-	let { points } = data;
+	let circleGroup: LayerGroup;
 
 	let errorVisible = true;
 
@@ -55,9 +52,9 @@
 	// Define the values used in the bind for the inputs
 	// We need the Union Types here so that it plays nice in the script and in the UI
 	// The inputs render
-	let latitude: number | string = 0;
-	let longitude: number | string = 0;
-	let radius: number | string = 0;
+	let latitude: number | string = '';
+	let longitude: number | string = '';
+	let radius: number | string = '';
 	let note: string = '';
 	let color: string = '#FF0000';
 
@@ -69,6 +66,22 @@
 		plottedPoints = [...plottedPoints, point];
 	}
 
+	function myLocation(): void {
+		// TODO: Implement
+	}
+
+	function getLocalStorageKeys(): PlotCircle[] {
+		let points: PlotCircle[] = [];
+		if (browser) {
+			for (let i = 0; i < window.localStorage.length; i++) {
+				let key: string | null = window.localStorage.key(i);
+				let point = JSON.parse(window.localStorage.getItem(key?.toString()!) || '');
+				points = [...points, point];
+			}
+		}
+		return points;
+	}
+
 	/**
 	 * Draws a circle on the map from the entered coordinates
 	 * Sets the view to the coordinates
@@ -78,51 +91,52 @@
 		if (!latitude || !longitude || !radius) {
 			console.log('Error: Missing coordinates');
 			return;
+		} else {
+			let plottedPoint: PlotCircle = {
+				latitude: latitude as number,
+				longitude: longitude as number,
+				radius: radius as number,
+				note: note,
+				color: color
+			};
+
+			// Create a group for the circles
+			// We need this so when we clear the map later of layers, we only clear this layer
+			let circleGroup = L.featureGroup();
+
+			// Draw the circle given the latitude, longitude, color and radius and add it to the map
+			L.circle([plottedPoint.latitude as number, plottedPoint.longitude as number], {
+				color: plottedPoint.color as string,
+				radius: plottedPoint.radius as number
+			}).addTo(circleGroup);
+
+			// Add the circle to the layer
+			map.addLayer(circleGroup);
+
+			// Set the current view to the latitude and longitude
+			map.setView([plottedPoint.latitude as number, plottedPoint.longitude as number]).setZoom(15);
+
+			// Add the point to the plottedPoints Array
+			// ! We're using this to return in the table for the time being
+			addPoint(plottedPoint);
+
+			// Add the point to the store which adds it to Local Storage
+			// This will be used to persist the data across refreshes
+			plottedPoints.forEach((point, index) => {
+				pointStore.set(index.toString(), point);
+			});
 		}
-		let plottedPoint: PlotCircle = {
-			latitude: latitude as number,
-			longitude: longitude as number,
-			radius: radius as number,
-			note: note,
-			color: color
-		};
-
-		// Create a group for the circles
-		// We need this so when we clear the map later of layers, we only clear this layer
-		let circleGroup = L.featureGroup();
-
-		// Draw the circle given the latitude, longitude, color and radius and add it to the map
-		L.circle([plottedPoint.latitude, plottedPoint.longitude], {
-			color: plottedPoint.color,
-			radius: plottedPoint.radius
-		}).addTo(circleGroup);
-
-		// Add the circle to the layer
-		map.addLayer(circleGroup);
-
-		// Set the current view to the latitude and longitude
-		map.setView([plottedPoint.latitude, plottedPoint.longitude]).setZoom(15);
-
-		// Add the point to the plottedPoints Array
-		addPoint(plottedPoint);
-
-		// Add the plottedPoint to Local Storage
-		// This will be used to persist the data across refreshes
-		plottedPoints.forEach((point, index) => {
-			pointStore.set(index.toString(), point);
-		});
-
-		/* ! Debugging */
-		console.log(plottedPoints);
 	}
 
 	// TODO: Implement
 	function clearAll(): void {
 		// Clear localStorage which should theoretically clear the store too lol
-		window.localStorage.clear();
+		if (browser) {
+			window.localStorage.clear();
 
-		if (map.hasLayer(circleGroup)) {
-			map.removeLayer(circleGroup);
+			if (map.hasLayer(circleGroup)) {
+				map.removeLayer(circleGroup);
+			}
 		}
 
 		// Reset the form while we're at it for accessibility
@@ -147,7 +161,7 @@
 		class="error-banner pl-6 mb-6 ml-6 mr-6 h-14 bg-red-500/80 border-l-4 flex items-center justify-between border-red-400/70"
 		transition:fade={{ duration: 300 }}
 	>
-		<p class="text-sm inline-flex">
+		<p class="text-sm inline-flex error">
 			<svg viewBox="0 0 24 24" class="h-5 w-5 mr-3"
 				><path
 					fill="currentColor"
@@ -166,7 +180,7 @@
 	</div>
 {/if}
 <div
-	class="md:grid md:grid-cols-5 md:grid-rows-3 md:grid-flow-dense h-screen md:gap-x-6 md:gap-y-10 mx-6"
+	class="md:grid md:grid-cols-5 md:grid-rows-3 md:grid-flow-dense h-screen md:gap-x-6 md:gap-y-16 mx-6"
 >
 	<form class="col-span-1 col-start-1 row-span-1 justify-self-center">
 		<div class="rounded-md shadow-sm">
@@ -241,6 +255,15 @@
 		>
 		<button
 			type="button"
+			on:click={myLocation}
+			value="My Location"
+			name="myLocation"
+			class="bg-gray-600 rounded-lg text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-6 cursor-pointer"
+			>My Location</button
+		>
+
+		<button
+			type="button"
 			on:click={resetForm}
 			value="Reset Form"
 			name="resetForm"
@@ -285,7 +308,7 @@
 				</tr>
 			</thead>
 			<tbody class="text-sm">
-				<!-- TODO: Load from localStorage store -->
+				<!-- TODO: Obtain points from localStorage and not the array -->
 				{#each plottedPoints as { latitude, longitude, radius, note, color }}
 					<tr class="text-sm bg-gray-700 border-b hover:bg-gray-800">
 						<td class="py-3 px-6">{latitude}</td>
@@ -293,12 +316,15 @@
 						<td class="py-3 px-6">{radius}</td>
 						<td class="py-3 px-6">{note ?? 'None'}</td>
 						<td class="py-3 px-6">{color}</td>
-						<td
-							><svg viewBox="0 0 24 24" class="fill-red-500 cursor-pointer h-5 w-5"
-								><path
-									d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6Z"
-								/></svg
-							></td
+						<td>
+							<!-- TODO: Implement on:click handler -->
+							<button class="align-middle ">
+								<svg viewBox="0 0 24 24" class="fill-red-500 cursor-pointer h-5 w-5"
+									><path
+										d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6Z"
+									/></svg
+								>
+							</button></td
 						>
 					</tr>
 				{/each}

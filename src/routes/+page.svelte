@@ -2,6 +2,7 @@
 	import { browser } from '$app/environment';
 	import { createStore } from '$lib/points';
 	import type { PlotCircle } from '$lib/types/PlotCircle';
+	import type { FeatureGroup, LayerGroup } from 'leaflet';
 	import { onDestroy, onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import type { PageData } from './$types';
@@ -9,9 +10,12 @@
 
 	let map: L.Map;
 	let mapElement: HTMLElement;
+	let circleGroup: FeatureGroup;
 
 	export let data: PageData;
 	let { points } = data;
+
+	let errorVisible = true;
 
 	onMount(async () => {
 		if (browser) {
@@ -73,8 +77,7 @@
 		// TODO: Return an error if any of the coordinates are missing
 		if (!latitude || !longitude || !radius) {
 			console.log('Error: Missing coordinates');
-			const message =
-				'Error: Missing coordinates or radius. Please enter the missing information and try again.';
+			return;
 		}
 		let plottedPoint: PlotCircle = {
 			latitude: latitude as number,
@@ -83,11 +86,19 @@
 			note: note,
 			color: color
 		};
+
+		// Create a group for the circles
+		// We need this so when we clear the map later of layers, we only clear this layer
+		let circleGroup = L.featureGroup();
+
 		// Draw the circle given the latitude, longitude, color and radius and add it to the map
 		L.circle([plottedPoint.latitude, plottedPoint.longitude], {
 			color: plottedPoint.color,
 			radius: plottedPoint.radius
-		}).addTo(map);
+		}).addTo(circleGroup);
+
+		// Add the circle to the layer
+		map.addLayer(circleGroup);
 
 		// Set the current view to the latitude and longitude
 		map.setView([plottedPoint.latitude, plottedPoint.longitude]).setZoom(15);
@@ -106,7 +117,17 @@
 	}
 
 	// TODO: Implement
-	function clearMap(): void {}
+	function clearAll(): void {
+		// Clear localStorage which should theoretically clear the store too lol
+		window.localStorage.clear();
+
+		if (map.hasLayer(circleGroup)) {
+			map.removeLayer(circleGroup);
+		}
+
+		// Reset the form while we're at it for accessibility
+		resetForm();
+	}
 
 	/**
 	 * Resets the form
@@ -121,18 +142,29 @@
 </script>
 
 <!-- TODO: Implement error -->
-<div
-	class="error-banner pl-6 mb-6 ml-6 mr-6 h-14 bg-red-500/80 border-l-4 flex items-center align-center border-red-400/70"
-	transition:fade={{ delay: 250, duration: 300 }}
->
-	<p>
-		Error <svg viewBox="0 0 24 24" class="fill-neutral-100 inline cursor-pointer h-5 w-5"
-			><path
-				d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6Z"
-			/></svg
-		>
-	</p>
-</div>
+{#if errorVisible}
+	<div
+		class="error-banner pl-6 mb-6 ml-6 mr-6 h-14 bg-red-500/80 border-l-4 flex items-center justify-between border-red-400/70"
+		transition:fade={{ duration: 300 }}
+	>
+		<p class="text-sm inline-flex">
+			<svg viewBox="0 0 24 24" class="h-5 w-5 mr-3"
+				><path
+					fill="currentColor"
+					d="M12 17q.425 0 .713-.288Q13 16.425 13 16t-.287-.713Q12.425 15 12 15t-.712.287Q11 15.575 11 16t.288.712Q11.575 17 12 17Zm-1-4h2V7h-2Zm1 9q-2.075 0-3.9-.788q-1.825-.787-3.175-2.137q-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175q1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138q1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175q-1.35 1.35-3.175 2.137Q14.075 22 12 22Z"
+				/></svg
+			>
+			Error
+		</p>
+		<button on:click={() => (errorVisible = false)} on:keypress>
+			<svg viewBox="0 0 24 24" class="fill-neutral-100 cursor-pointer mr-6 h-5 w-5"
+				><path
+					d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6Z"
+				/></svg
+			>
+		</button>
+	</div>
+{/if}
 <div
 	class="md:grid md:grid-cols-5 md:grid-rows-3 md:grid-flow-dense h-screen md:gap-x-6 md:gap-y-10 mx-6"
 >
@@ -217,10 +249,11 @@
 		>
 		<button
 			type="button"
-			value="Clear Map"
-			name="clearMap"
+			on:click={clearAll}
+			value="Clear All"
+			name="clearAll"
 			class="bg-gray-600 rounded-lg text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-6 cursor-pointer"
-			>Clear Map</button
+			>Clear All</button
 		>
 		<button
 			type="button"

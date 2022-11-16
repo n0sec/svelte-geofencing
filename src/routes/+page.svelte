@@ -5,6 +5,7 @@
 	import type { LayerGroup } from 'leaflet';
 	import { onDestroy, onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
+	import hash from 'object-hash';
 	let L: typeof import('leaflet');
 
 	/* ! VARIABLE DEFINITIONS */
@@ -12,6 +13,8 @@
 	let map: L.Map;
 	let mapElement: HTMLElement;
 	let circleGroup: LayerGroup;
+
+	let shareUrl: string;
 
 	let errorVisible = true;
 
@@ -171,6 +174,19 @@
 			errorVisible = false;
 		}
 	}
+
+	async function share() {
+		const response = await fetch('/api/share', {
+			method: 'POST',
+			body: JSON.stringify(localStoragePoints),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+
+		shareUrl = await response.json();
+		console.log(shareUrl);
+	}
 </script>
 
 <!-- TODO: Implement error -->
@@ -187,7 +203,7 @@
 					d="M12 17q.425 0 .713-.288Q13 16.425 13 16t-.287-.713Q12.425 15 12 15t-.712.287Q11 15.575 11 16t.288.712Q11.575 17 12 17Zm-1-4h2V7h-2Zm1 9q-2.075 0-3.9-.788q-1.825-.787-3.175-2.137q-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175q1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138q1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175q-1.35 1.35-3.175 2.137Q14.075 22 12 22Z"
 				/></svg
 			>
-			Error
+			{shareUrl}
 		</p>
 		<button on:click={() => (errorVisible = false)}>
 			<svg viewBox="0 0 24 24" class="fill-neutral-100 cursor-pointer mr-6 h-5 w-5"
@@ -299,6 +315,7 @@
 		>
 		<button
 			type="button"
+			on:click={share}
 			value="Share"
 			name="share"
 			class="bg-blue-500 rounded-lg text-sm text-center shadow-sm hover:bg-blue-600 focus:ring-blue-400 focus:ring-2 py-2.5 w-full mt-6 cursor-pointer"

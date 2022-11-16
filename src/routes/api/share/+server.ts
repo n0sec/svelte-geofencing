@@ -1,17 +1,15 @@
-import { error } from '@sveltejs/kit';
+import { error, json } from '@sveltejs/kit';
+import db from '$lib/db';
+import hash from 'object-hash';
 import type { RequestHandler } from './$types';
 
-export const GET: RequestHandler = ({ url }) => {
-	const min = Number(url.searchParams.get('min') ?? '0');
-	const max = Number(url.searchParams.get('max') ?? '1');
+export const POST: RequestHandler = async ({ request }) => {
+	const jsonResponse = await request.json();
+	const pointJson = JSON.parse(jsonResponse);
 
-	const d = max - min;
+	const pointHash = hash.sha1(pointJson);
+	const stmt = db.prepare(`INSERT INTO points VALUES ('${pointHash}', '${pointJson}')`);
+	stmt.run();
 
-	if (isNaN(d) || d < 0) {
-		throw error(400, 'min and max must be numbers, and min must be less than max');
-	}
-
-	const random = min + Math.random() * d;
-
-	return new Response(String(random));
+	return new Response(pointHash);
 };

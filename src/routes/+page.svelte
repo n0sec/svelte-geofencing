@@ -5,7 +5,6 @@
 	import type { LayerGroup } from 'leaflet';
 	import { onDestroy, onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { db } from '../../data/db';
 	let L: typeof import('leaflet');
 
 	/* ! VARIABLE DEFINITIONS */
@@ -13,7 +12,7 @@
 	let map: L.Map;
 	let mapElement: HTMLElement;
 	let circleGroup: LayerGroup;
-	
+
 	let errorVisible = true;
 
 	// Define the values used in the bind for the inputs
@@ -313,9 +312,7 @@
 		>
 	</div>
 
-	<div
-		class="overflow-x-auto relative md:rounded-tl-md md:rounded-tr-md col-start-1 col-span-2 self-start border border-gray-400"
-	>
+	<div class="overflow-x-auto relative col-start-1 col-span-2 self-start border border-gray-400">
 		<table class="w-full text-sm table-auto border-collapse text-left">
 			<thead class="uppercase text-xs bg-gray-600">
 				<tr>
@@ -330,7 +327,7 @@
 			<tbody class="text-sm">
 				<!-- TODO: Obtain points from localStorage and not the array -->
 				{#each localStoragePoints as { latitude, longitude, radius, note, color }}
-					<tr class="text-sm bg-gray-700 border-b hover:bg-gray-800">
+					<tr class="text-sm bg-gray-700 hover:bg-gray-800">
 						<td class="py-3 px-6">{latitude}</td>
 						<td class="py-3 px-6">{longitude}</td>
 						<td class="py-3 px-6">{radius}</td>

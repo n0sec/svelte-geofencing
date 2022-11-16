@@ -5,6 +5,7 @@
 	import type { LayerGroup } from 'leaflet';
 	import { onDestroy, onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
+	import { db } from '../../data/db';
 	let L: typeof import('leaflet');
 
 	/* ! VARIABLE DEFINITIONS */
@@ -12,7 +13,7 @@
 	let map: L.Map;
 	let mapElement: HTMLElement;
 	let circleGroup: LayerGroup;
-
+	
 	let errorVisible = true;
 
 	// Define the values used in the bind for the inputs
@@ -162,7 +163,7 @@
 	}
 
 	function myLocation(): void {
-		map.locate({ timeout: 500, setView: true, maxZoom: 18 }).setZoom(15);
+		map.locate({ timeout: 5000, setView: true, maxZoom: 18 }).setZoom(15);
 	}
 
 	function handleCloseError(event: any) {

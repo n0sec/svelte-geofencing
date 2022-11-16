@@ -39,6 +39,7 @@
 	"dependencies": {
 		"@googlemaps/js-api-loader": "^1.15.1",
 		"better-sqlite3": "^7.6.2",
-		"leaflet": "^1.9.2"
+		"leaflet": "^1.9.2",
+		"object-hash": "^3.0.0"
 	}
 }

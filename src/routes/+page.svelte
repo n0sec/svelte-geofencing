@@ -186,7 +186,7 @@
 			}
 			const response = await fetch('/api/share', {
 				method: 'POST',
-				body: JSON.stringify(localStoragePoints),
+				body: JSON.stringify($pointStore),
 				headers: {
 					'content-type': 'application/json',
 					accept: 'text/html'

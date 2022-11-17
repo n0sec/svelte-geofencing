@@ -1,21 +1,30 @@
 import { writable } from 'svelte/store';
 import type { PlotCircle } from './types/PlotCircle';
 
-export function createStore(initialData: PlotCircle, key: string) {
+export function createStore<T>(initialData: T[], key: string) {
 	const data = typeof window !== 'undefined' ? window.localStorage.getItem(key) : null;
 
 	if (data) {
-		initialData = JSON.parse(data);
+		initialData = JSON.parse(data) as T[];
 	}
 
-	const { subscribe, set: _set, update: _update } = writable(initialData);
+	const store = writable<T[]>(initialData);
+
+	// Add and update localStorage
+	function add(value: T) {
+		store.update(($store) => [...$store, value]);
+		window.localStorage.setItem(key, JSON.stringify(store));
+	}
+
+	// Clear and update localStorage
+	function clear() {
+		store.set([]);
+		window.localStorage.setItem(key, JSON.stringify([]));
+	}
 
 	return {
-		subscribe,
-
-		set(key: string, value: PlotCircle) {
-			window.localStorage.setItem(key, JSON.stringify(value));
-			_set(value);
-		}
+		subscribe: store.subscribe,
+		add,
+		clear
 	};
 }

@@ -5,8 +5,8 @@ db.pragma('journal_mode = WAL');
 
 db.exec(`
     CREATE TABLE IF NOT EXISTS points (
-        hash TEXT PRIMARY KEY,
-        point_json TEXT NOT NULL
+        id TEXT PRIMARY KEY,
+        point_string TEXT NOT NULL
     ) STRICT;
 `);
 

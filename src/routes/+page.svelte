@@ -184,7 +184,7 @@
 			}
 		});
 
-		shareUrl = await response.json();
+		shareUrl = await response.text();
 		console.log(shareUrl);
 	}
 </script>

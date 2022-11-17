@@ -17,7 +17,7 @@
 	let shareUrl: string;
 
 	let errorVisible = false;
-	let errorText: string = '';
+	let errorText: string;
 
 	// Define the values used in the bind for the inputs
 	// We need the Union Types here so that it plays nice in the script and in the UI
@@ -29,7 +29,7 @@
 	let color: string = '#FF0000';
 
 	// Create the point store
-	let pointStore = createStore({ latitude, longitude, radius, note, color }, 'Test');
+	let pointStore = createStore<PlotCircle>([{ latitude, longitude, radius, note, color }], 'Test');
 
 	// Initialize the plotted points array
 	let plottedPoints: PlotCircle[] = [];
@@ -41,8 +41,8 @@
 		if (browser) {
 			// Clear local storage on mount
 			// This means that the user will need to plot their points over again every time they visit the page
-			// This shouldn't be a huge deal since thus really shouldn't be used to plot dozens or hundreds of points
-			window.localStorage.clear();
+			// This shouldn't be a huge deal since this really shouldn't be used to plot dozens or hundreds of points
+			pointStore.clear();
 			L = await import('leaflet');
 
 			let openStreetLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -130,7 +130,7 @@
 			// Then refresh the localStoragePoints with what is in localStorage
 			// ?? Not sure this is the best way
 			plottedPoints.forEach((point, index) => {
-				pointStore.set(index.toString(), point);
+				pointStore.add(point);
 				localStoragePoints = getLocalStorageKeys();
 			});
 
@@ -152,10 +152,11 @@
 
 	// ?? Really not sure if an array is best here or if we can do this right from the store but ¯\_(ツ)_/¯
 	function clearAll(): void {
-		// Clear localStorage which should theoretically clear the store too lol
 		if (browser) {
-			window.localStorage.clear();
-			localStoragePoints = [];
+			// Clear the store
+			pointStore.clear();
+
+			// Clear the map
 			if (map.hasLayer(circleGroup)) {
 				map.removeLayer(circleGroup);
 			}
@@ -176,11 +177,13 @@
 		}
 	}
 
+	function deletePoint() {}
+
 	async function share() {
 		try {
-			// if ((localStoragePoints = [])) {
-			// 	throw error(400, { message: 'No entries plotted. Please try again.' });
-			// }
+			if ((localStoragePoints = [])) {
+				throw error(400, { message: 'No entries plotted. Please try again.' });
+			}
 			const response = await fetch('/api/share', {
 				method: 'POST',
 				body: JSON.stringify(localStoragePoints),
@@ -351,7 +354,6 @@
 				</tr>
 			</thead>
 			<tbody class="text-sm">
-				<!-- TODO: Obtain points from localStorage and not the array -->
 				{#each localStoragePoints as { latitude, longitude, radius, note, color }}
 					<tr class="text-sm bg-gray-700 hover:bg-gray-800">
 						<td class="py-3 px-6">{latitude}</td>
@@ -361,7 +363,7 @@
 						<td class="py-3 px-6">{color}</td>
 						<td>
 							<!-- TODO: Implement on:click handler -->
-							<button class="align-middle ">
+							<button class="align-middle" on:click={deletePoint}>
 								<svg viewBox="0 0 24 24" class="fill-red-500 cursor-pointer h-5 w-5"
 									><path
 										d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6Z"

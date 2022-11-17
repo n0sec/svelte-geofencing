@@ -185,7 +185,7 @@
 		});
 
 		shareUrl = await response.text();
-		console.log(shareUrl);
+		history.pushState(null, '', shareUrl);
 	}
 </script>
 

@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import db from '$lib/db';
+import db from '$lib/server/db';
 import { customAlphabet } from 'nanoid';
 import type { RequestHandler } from './$types';
 
@@ -16,14 +16,14 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	// Generate a unique identifier to match with the points
 	const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 30);
-	const pointIdentifier: string = await nanoid();
+	const id: string = await nanoid();
 
 	try {
 		// Prepare the statement
 		const stmt = db.prepare(`INSERT INTO points VALUES (?, ?)`);
 
 		// Run the statement
-		stmt.run(pointIdentifier, pointString);
+		stmt.run(id, pointString);
 
 		// We really should never get here
 	} catch (error: any) {
@@ -31,5 +31,5 @@ export const POST: RequestHandler = async ({ request }) => {
 	}
 
 	// Return a Response object with the identifier in it
-	return new Response(pointIdentifier);
+	return new Response(id);
 };

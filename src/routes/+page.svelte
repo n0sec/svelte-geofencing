@@ -5,7 +5,7 @@
 	import type { LayerGroup } from 'leaflet';
 	import { onDestroy, onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { page } from '$app/stores';
+	import { error } from '@sveltejs/kit';
 	let L: typeof import('leaflet');
 
 	/* ! VARIABLE DEFINITIONS */
@@ -17,6 +17,7 @@
 	let shareUrl: string;
 
 	let errorVisible = false;
+	let errorText: string = '';
 
 	// Define the values used in the bind for the inputs
 	// We need the Union Types here so that it plays nice in the script and in the UI
@@ -145,7 +146,7 @@
 		latitude = '';
 		longitude = '';
 		radius = '';
-		note = 'None';
+		note = '';
 		color = '#ff0000'; // Leave this red as the default
 	}
 
@@ -176,16 +177,24 @@
 	}
 
 	async function share() {
-		const response = await fetch('/api/share', {
-			method: 'POST',
-			body: JSON.stringify(localStoragePoints),
-			headers: {
-				'content-type': 'application/json'
-			}
-		});
+		try {
+			// if ((localStoragePoints = [])) {
+			// 	throw error(400, { message: 'No entries plotted. Please try again.' });
+			// }
+			const response = await fetch('/api/share', {
+				method: 'POST',
+				body: JSON.stringify(localStoragePoints),
+				headers: {
+					'content-type': 'application/json',
+					accept: 'text/html'
+				}
+			});
 
-		shareUrl = await response.text();
-		history.pushState(null, '', shareUrl);
+			shareUrl = await response.text();
+		} catch (err: any) {
+			errorText = err;
+			errorVisible = true;
+		}
 	}
 </script>
 
@@ -203,7 +212,7 @@
 					d="M12 17q.425 0 .713-.288Q13 16.425 13 16t-.287-.713Q12.425 15 12 15t-.712.287Q11 15.575 11 16t.288.712Q11.575 17 12 17Zm-1-4h2V7h-2Zm1 9q-2.075 0-3.9-.788q-1.825-.787-3.175-2.137q-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175q1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138q1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175q-1.35 1.35-3.175 2.137Q14.075 22 12 22Z"
 				/></svg
 			>
-			{$page?.error?.message}
+			{errorText}
 		</p>
 		<button on:click={() => (errorVisible = false)}>
 			<svg viewBox="0 0 24 24" class="fill-neutral-100 cursor-pointer mr-6 h-5 w-5"

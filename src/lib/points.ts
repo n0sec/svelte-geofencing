@@ -19,7 +19,7 @@ export function createStore<T>(initialData: T[], key: string) {
 	// Clear and update localStorage
 	function clear() {
 		store.set([]);
-		window.localStorage.setItem(key, JSON.stringify([]));
+		window.localStorage.clear();
 	}
 
 	return {

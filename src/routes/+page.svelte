@@ -129,15 +129,16 @@
 			// Add the point to the store which adds it to Local Storage
 			// Then refresh the localStoragePoints with what is in localStorage
 			// ?? Not sure this is the best way
-			plottedPoints.forEach((point, index) => {
-				pointStore.add(point);
-				localStoragePoints = getLocalStorageKeys();
-			});
+			pointStore.add({ latitude, longitude, radius, note, color });
 
 			// console.log(`Plotted Points: ${JSON.stringify(plottedPoints)}`);
 			// console.log(`Local Storage: ${JSON.stringify(localStoragePoints)}`);
 		}
 	}
+
+	// function plotLatestPoint(points: PlotCircle[]) {
+	// 	if (pointStore.length == 0)
+	// }
 
 	/**
 	 * Resets the form

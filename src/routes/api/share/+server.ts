@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 import db from '$lib/db';
-import hash from 'object-hash';
+import { customAlphabet } from 'nanoid';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request }) => {
@@ -14,23 +14,22 @@ export const POST: RequestHandler = async ({ request }) => {
 	// Stringify the object with JSON.stringify()
 	const pointString: string = JSON.stringify(pointJson);
 
-	// Hash the object using object-hash
-	const pointHash: string = hash(pointJson, { algorithm: 'md5' });
-	const newUrl = `${request.url}/${pointHash}`;
-	console.log(newUrl);
+	// Generate a unique identifier to match with the points
+	const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 30);
+	const pointIdentifier: string = await nanoid();
 
 	try {
 		// Prepare the statement
 		const stmt = db.prepare(`INSERT INTO points VALUES (?, ?)`);
 
 		// Run the statement
-		stmt.run(pointHash, pointString);
+		stmt.run(pointIdentifier, pointString);
+
+		// We really should never get here
 	} catch (error: any) {
 		throw error(500, 'Something went wrong with the request. Please try the request again.');
 	}
 
-	// Return a Response object with the hash in it
-	return new Response(newUrl);
-
-	// TODO: Create the new URL and return that instead
+	// Return a Response object with the identifier in it
+	return new Response(pointIdentifier);
 };

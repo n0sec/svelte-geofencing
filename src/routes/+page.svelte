@@ -92,7 +92,7 @@
 	 * Draws a circle on the map from the entered coordinates
 	 * Sets the view to the coordinates
 	 */
-	function plot(): void | string {
+	function plot(point?: PlotCircle): void | string {
 		// TODO: Return an error if any of the coordinates are missing
 		if (!latitude || !longitude || !radius) {
 			console.log('Error: Missing coordinates');
@@ -130,15 +130,22 @@
 			// Then refresh the localStoragePoints with what is in localStorage
 			// ?? Not sure this is the best way
 			pointStore.add({ latitude, longitude, radius, note, color });
+			console.log({ latitude, longitude, radius, note, color });
 
 			// console.log(`Plotted Points: ${JSON.stringify(plottedPoints)}`);
 			// console.log(`Local Storage: ${JSON.stringify(localStoragePoints)}`);
 		}
 	}
 
-	// function plotLatestPoint(points: PlotCircle[]) {
-	// 	if (pointStore.length == 0)
-	// }
+	function plotLatestPoint(points: PlotCircle[]) {
+		if (points.length == 0) {
+			return;
+		}
+		const point = points[points.length - 1];
+		plot(point);
+	}
+
+	$: plotLatestPoint($pointStore);
 
 	/**
 	 * Resets the form

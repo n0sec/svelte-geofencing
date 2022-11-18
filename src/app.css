@@ -43,6 +43,6 @@ a:hover {
 	@apply text-neutral-200;
 }
 
-p:not(.error) {
+section p:not(.error, .info) {
 	@apply mt-6;
 }

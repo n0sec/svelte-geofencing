@@ -12,8 +12,11 @@ export function createStore<T>(initialData: T[], key: string) {
 
 	// Add and update localStorage
 	function add(value: T) {
-		store.update(($store) => [...$store, value]);
-		window.localStorage.setItem(key, JSON.stringify(store));
+		store.update(($store) => {
+			$store = [...$store, value];
+			window.localStorage.setItem(key, JSON.stringify($store));
+			return $store;
+		});
 	}
 
 	// Clear and update localStorage

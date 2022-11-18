@@ -5,7 +5,7 @@
 	import type { LayerGroup } from 'leaflet';
 	import { onDestroy, onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { error } from '@sveltejs/kit';
+	import Modal from '$lib/components/Modal.svelte';
 	let L: typeof import('leaflet');
 
 	/* ! VARIABLE DEFINITIONS */
@@ -14,10 +14,11 @@
 	let mapElement: HTMLElement;
 	let circleGroup: LayerGroup;
 
-	let shareUrl: string;
-
 	let errorVisible = false;
 	let errorText: string;
+
+	let pointIdentifier: string;
+	let modalVisible: boolean = false;
 
 	// Define the values used in the bind for the inputs
 	// We need the Union Types here so that it plays nice in the script and in the UI
@@ -29,20 +30,20 @@
 	let color: string = '#FF0000';
 
 	// Create the point store
-	let pointStore = createStore<PlotCircle>([{ latitude, longitude, radius, note, color }], 'Test');
-
-	// Initialize the plotted points array
-	let plottedPoints: PlotCircle[] = [];
-	let localStoragePoints: PlotCircle[] = [];
+	let pointStore = createStore<PlotCircle>(
+		[{ latitude, longitude, radius, note, color }],
+		'points'
+	);
 
 	/***********************************************/
 
 	onMount(async () => {
 		if (browser) {
-			// Clear local storage on mount
+			// Clear store on mount
 			// This means that the user will need to plot their points over again every time they visit the page
 			// This shouldn't be a huge deal since this really shouldn't be used to plot dozens or hundreds of points
 			pointStore.clear();
+
 			L = await import('leaflet');
 
 			let openStreetLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -72,22 +73,6 @@
 		}
 	});
 
-	function addPoint(point: PlotCircle) {
-		plottedPoints = [...plottedPoints, point];
-	}
-
-	function getLocalStorageKeys(): PlotCircle[] {
-		let points: PlotCircle[] = [];
-		if (browser) {
-			for (let i = 0; i < window.localStorage.length; i++) {
-				let key: string | null = window.localStorage.key(i);
-				let point = JSON.parse(window.localStorage.getItem(key?.toString()!) || '');
-				points = [...points, point];
-			}
-		}
-		return points;
-	}
-
 	/**
 	 * Draws a circle on the map from the entered coordinates
 	 * Sets the view to the coordinates
@@ -98,42 +83,24 @@
 			console.log('Error: Missing coordinates');
 			return;
 		} else {
-			let plottedPoint: PlotCircle = {
-				latitude: latitude as number,
-				longitude: longitude as number,
-				radius: radius as number,
-				note: note,
-				color: color
-			};
-
 			// Create a group for the circles
 			// We need this so when we clear the map later of layers, we only clear this layer
 			circleGroup = L.featureGroup();
 
 			// Draw the circle given the latitude, longitude, color and radius and add it to the map
-			L.circle([plottedPoint.latitude as number, plottedPoint.longitude as number], {
-				color: plottedPoint.color as string,
-				radius: plottedPoint.radius as number
+			L.circle([latitude as number, longitude as number], {
+				color: color as string,
+				radius: radius as number
 			}).addTo(circleGroup);
 
 			// Add the circle to the layer
 			map.addLayer(circleGroup);
 
 			// Set the current view to the latitude and longitude
-			map.setView([plottedPoint.latitude as number, plottedPoint.longitude as number]).setZoom(15);
-
-			// Add the point to the plottedPoints Array
-			// ! We're using this to return in the table for the time being
-			addPoint(plottedPoint);
+			map.setView([latitude as number, longitude as number]).setZoom(15);
 
 			// Add the point to the store which adds it to Local Storage
-			// Then refresh the localStoragePoints with what is in localStorage
-			// ?? Not sure this is the best way
 			pointStore.add({ latitude, longitude, radius, note, color });
-			console.log({ latitude, longitude, radius, note, color });
-
-			// console.log(`Plotted Points: ${JSON.stringify(plottedPoints)}`);
-			// console.log(`Local Storage: ${JSON.stringify(localStoragePoints)}`);
 		}
 	}
 
@@ -188,24 +155,23 @@
 	function deletePoint() {}
 
 	async function share() {
-		try {
-			if ((localStoragePoints = [])) {
-				throw error(400, { message: 'No entries plotted. Please try again.' });
-			}
-			const response = await fetch('/api/share', {
-				method: 'POST',
-				body: JSON.stringify($pointStore),
-				headers: {
-					'content-type': 'application/json',
-					accept: 'text/html'
-				}
-			});
-
-			shareUrl = await response.text();
-		} catch (err: any) {
-			errorText = err;
+		// Check if there's anything in the store
+		if ($pointStore.length === 0) {
+			errorText = 'No points have been plotted! Plot some points first!';
 			errorVisible = true;
+			return;
 		}
+		const response = await fetch('/api/share', {
+			method: 'POST',
+			body: JSON.stringify($pointStore),
+			headers: {
+				'content-type': 'application/json',
+				accept: 'text/html'
+			}
+		});
+
+		pointIdentifier = await response.text();
+		console.log(pointIdentifier);
 	}
 </script>
 
@@ -233,6 +199,9 @@
 			>
 		</button>
 	</div>
+{/if}
+{#if pointIdentifier}
+	<Modal identifier={pointIdentifier} />
 {/if}
 <div
 	class="md:grid md:grid-cols-5 md:grid-rows-3 md:grid-flow-dense h-screen md:gap-x-6 md:gap-y-16 mx-6"
@@ -303,7 +272,7 @@
 	<div class="col-start-2 row-span-1">
 		<button
 			type="submit"
-			on:click={plot}
+			on:click={() => plot({ latitude, longitude, radius, note, color })}
 			value="Plot"
 			class="bg-gray-600 rounded-lg text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-3 cursor-pointer"
 			>Plot</button
@@ -362,7 +331,7 @@
 				</tr>
 			</thead>
 			<tbody class="text-sm">
-				{#each localStoragePoints as { latitude, longitude, radius, note, color }}
+				{#each $pointStore as { latitude, longitude, radius, note, color }}
 					<tr class="text-sm bg-gray-700 hover:bg-gray-800">
 						<td class="py-3 px-6">{latitude}</td>
 						<td class="py-3 px-6">{longitude}</td>
@@ -384,5 +353,5 @@
 			</tbody>
 		</table>
 	</div>
-	<div id="map" class="overflow-hidden col-span-3 row-span-3" bind:this={mapElement} />
+	<div id="map" class="overflow-hidden col-span-3 row-span-3 z-10" bind:this={mapElement} />
 </div>

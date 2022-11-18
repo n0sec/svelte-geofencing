@@ -4,18 +4,17 @@ import { customAlphabet } from 'nanoid';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request }) => {
-	if (!request.body) {
-		throw error(400, 'Request body not found. Please try again.');
-	}
-
 	// Parse request Body into Object
-	const pointJson = await request.json();
+	const body = await request.json();
 
 	// Stringify the object with JSON.stringify()
-	const pointString: string = JSON.stringify(pointJson);
+	const pointString: string = JSON.stringify(body);
 
 	// Generate a unique identifier to match with the points
-	const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 30);
+	const nanoid = customAlphabet(
+		'1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+		30
+	);
 	const id: string = await nanoid();
 
 	try {
@@ -25,11 +24,16 @@ export const POST: RequestHandler = async ({ request }) => {
 		// Run the statement
 		stmt.run(id, pointString);
 
+		// Return a Response object with the identifier in it
+		return new Response(id);
+
 		// We really should never get here
 	} catch (error: any) {
-		throw error(500, 'Something went wrong with the request. Please try the request again.');
+		return new Response(
+			JSON.stringify({
+				message: 'Something went wrong with the request. Please try the request again.'
+			}),
+			{ status: 500 }
+		);
 	}
-
-	// Return a Response object with the identifier in it
-	return new Response(id);
 };

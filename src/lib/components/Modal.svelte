@@ -52,7 +52,7 @@
 							<button on:click={() => (visible = false)}>
 								<Close class="h-5 w-5 cursor-pointer absolute top-3 right-3" />
 							</button>
-							<div class="mt-2">
+							<div class="">
 								<p class="text-sm ">
 									You have successfully saved your plotted points. Copy the below identifier and
 									provide this to Support for troubleshooting.

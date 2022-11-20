@@ -3,6 +3,7 @@
 	import copy from 'copy-to-clipboard';
 
 	export let identifier: string;
+	export let visible: boolean;
 </script>
 
 <div class="relative z-20" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -48,7 +49,9 @@
 						</div>
 						<div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
 							<h3 class="text-lg font-medium leading-6 " id="modal-title">Success!</h3>
-							<Close class="h-5 w-5 cursor-pointer absolute top-3 right-3" />
+							<button on:click={() => (visible = false)}>
+								<Close class="h-5 w-5 cursor-pointer absolute top-3 right-3" />
+							</button>
 							<div class="mt-2">
 								<p class="text-sm ">
 									You have successfully saved your plotted points. Copy the below identifier and

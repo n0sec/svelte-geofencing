@@ -201,7 +201,7 @@
 		</button>
 	</div>
 {/if}
-{#if pointIdentifier && modalVisible}
+{#if modalVisible}
 	<Modal identifier={pointIdentifier} visible={modalVisible} />
 {/if}
 <div

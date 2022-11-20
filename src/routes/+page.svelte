@@ -112,7 +112,7 @@
 		plot(point);
 	}
 
-	$: plotLatestPoint($pointStore);
+	// $: plotLatestPoint($pointStore);
 
 	/**
 	 * Resets the form
@@ -171,6 +171,7 @@
 		});
 
 		pointIdentifier = await response.text();
+		modalVisible = true;
 		console.log(pointIdentifier);
 	}
 </script>
@@ -200,8 +201,8 @@
 		</button>
 	</div>
 {/if}
-{#if pointIdentifier}
-	<Modal identifier={pointIdentifier} />
+{#if pointIdentifier && modalVisible}
+	<Modal identifier={pointIdentifier} visible={modalVisible} />
 {/if}
 <div
 	class="md:grid md:grid-cols-5 md:grid-rows-3 md:grid-flow-dense h-screen md:gap-x-6 md:gap-y-16 mx-6"

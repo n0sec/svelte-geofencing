@@ -77,31 +77,27 @@
 	 * Draws a circle on the map from the entered coordinates
 	 * Sets the view to the coordinates
 	 */
-	function plot(point?: PlotCircle): void | string {
+	function plot(point: PlotCircle): void | string {
 		// TODO: Return an error if any of the coordinates are missing
-		if (!latitude || !longitude || !radius) {
-			console.log('Error: Missing coordinates');
-			return;
-		} else {
-			// Create a group for the circles
-			// We need this so when we clear the map later of layers, we only clear this layer
-			circleGroup = L.featureGroup();
+		// Create a group for the circles
+		// We need this so when we clear the map later of layers, we only clear this layer
+		circleGroup = L.layerGroup();
 
-			// Draw the circle given the latitude, longitude, color and radius and add it to the map
-			L.circle([latitude as number, longitude as number], {
-				color: color as string,
-				radius: radius as number
-			}).addTo(circleGroup);
+		// Draw the circle given the latitude, longitude, color and radius and add it to the map
+		L.circle([point.latitude as number, point.longitude as number], {
+			color: point.color as string,
+			radius: point.radius as number
+		}).addTo(circleGroup);
 
-			// Add the circle to the layer
-			map.addLayer(circleGroup);
+		// Add the circle to the layer
+		map.addLayer(circleGroup);
 
-			// Set the current view to the latitude and longitude
-			map.setView([latitude as number, longitude as number]).setZoom(15);
+		// Set the current view to the latitude and longitude
+		map.setView([point.latitude as number, point.longitude as number]).setZoom(15);
+	}
 
-			// Add the point to the store which adds it to Local Storage
-			pointStore.add({ latitude, longitude, radius, note, color });
-		}
+	function addToStore(point: PlotCircle) {
+		pointStore.add(point);
 	}
 
 	function plotLatestPoint(points: PlotCircle[]) {
@@ -112,7 +108,7 @@
 		plot(point);
 	}
 
-	// $: plotLatestPoint($pointStore);
+	$: plotLatestPoint($pointStore);
 
 	/**
 	 * Resets the form
@@ -273,7 +269,7 @@
 	<div class="col-start-2 row-span-1">
 		<button
 			type="submit"
-			on:click={() => plot({ latitude, longitude, radius, note, color })}
+			on:click={() => addToStore({ latitude, longitude, radius, note, color })}
 			value="Plot"
 			class="bg-gray-600 rounded-lg text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-3 cursor-pointer"
 			>Plot</button

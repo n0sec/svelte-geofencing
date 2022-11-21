@@ -113,7 +113,7 @@
 		plot(point);
 	}
 
-	$: browser && plotLatestPoint($pointStore);
+	$: browser && L && plotLatestPoint($pointStore);
 
 	/**
 	 * Resets the form

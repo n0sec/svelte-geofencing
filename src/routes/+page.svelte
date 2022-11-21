@@ -43,7 +43,6 @@
 			// This means that the user will need to plot their points over again every time they visit the page
 			// This shouldn't be a huge deal since this really shouldn't be used to plot dozens or hundreds of points
 			pointStore.clear();
-
 			L = await import('leaflet');
 
 			let openStreetLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -78,25 +77,31 @@
 	 * Sets the view to the coordinates
 	 */
 	function plot(point: PlotCircle): void | string {
+		const { latitude, longitude, radius, note, color } = point;
+		console.log(`plot: ${point}}`);
+
 		// TODO: Return an error if any of the coordinates are missing
 		// Create a group for the circles
 		// We need this so when we clear the map later of layers, we only clear this layer
 		circleGroup = L.layerGroup();
 
+		console.log(point);
+
 		// Draw the circle given the latitude, longitude, color and radius and add it to the map
-		L.circle([point.latitude as number, point.longitude as number], {
-			color: point.color as string,
-			radius: point.radius as number
+		L.circle([latitude as number, longitude as number], {
+			color: color as string,
+			radius: radius as number
 		}).addTo(circleGroup);
 
 		// Add the circle to the layer
 		map.addLayer(circleGroup);
 
 		// Set the current view to the latitude and longitude
-		map.setView([point.latitude as number, point.longitude as number]).setZoom(15);
+		map.setView([latitude as number, longitude as number]).setZoom(15);
 	}
 
 	function addToStore(point: PlotCircle) {
+		console.log(`add to store: ${point}`);
 		pointStore.add(point);
 	}
 
@@ -108,7 +113,7 @@
 		plot(point);
 	}
 
-	$: plotLatestPoint($pointStore);
+	$: browser && plotLatestPoint($pointStore);
 
 	/**
 	 * Resets the form
@@ -172,7 +177,6 @@
 	}
 </script>
 
-<!-- TODO: Implement error -->
 {#if errorVisible}
 	<div
 		class="error-banner pl-6 mb-6 ml-6 mr-6 h-14 bg-red-500/80 border-l-4 flex items-center justify-between border-red-400/70"
@@ -268,7 +272,7 @@
 	</form>
 	<div class="col-start-2 row-span-1">
 		<button
-			type="submit"
+			type="button"
 			on:click={() => addToStore({ latitude, longitude, radius, note, color })}
 			value="Plot"
 			class="bg-gray-600 rounded-lg text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-3 cursor-pointer"

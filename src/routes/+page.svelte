@@ -6,6 +6,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import Modal from '$lib/components/Modal.svelte';
+	import Map from '$lib/components/Map.svelte';
 	let L: typeof import('leaflet');
 
 	/* ! VARIABLE DEFINITIONS */
@@ -367,5 +368,11 @@
 			</tbody>
 		</table>
 	</div>
-	<div id="map" class="overflow-hidden col-span-3 row-span-3 z-10" bind:this={mapElement} />
+	<!-- <div
+		id="map"
+		class="overflow-hidden col-span-3 row-span-3 h-[87vh] z-10"
+		bind:this={mapElement}
+	/> -->
+
+	<Map />
 </div>

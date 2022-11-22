@@ -79,6 +79,7 @@
 				<div class="bg-gray-700/60 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
 					<button
 						type="button"
+						on:click={() => (visible = false)}
 						class="inline-flex w-full justify-center rounded-md bg-blue-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 sm:ml-3 sm:w-auto sm:text-sm"
 						>OK</button
 					>

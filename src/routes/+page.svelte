@@ -19,6 +19,7 @@
 
 	let pointIdentifier: string;
 	let modalVisible: boolean = false;
+	let inputsDisabled: boolean = false;
 
 	// Define the values used in the bind for the inputs
 	// We need the Union Types here so that it plays nice in the script and in the UI
@@ -140,6 +141,9 @@
 
 		// Reset the form while we're at it for accessibility
 		resetForm();
+
+		// Reset the input fields to make them available again in case the user shared what they had
+		inputsDisabled = false;
 	}
 
 	function myLocation(): void {
@@ -173,6 +177,10 @@
 
 		pointIdentifier = await response.text();
 		modalVisible = true;
+		history.pushState(null, '', `/${pointIdentifier}`);
+
+		inputsDisabled = true;
+
 		console.log(pointIdentifier);
 	}
 </script>
@@ -202,7 +210,7 @@
 	</div>
 {/if}
 {#if modalVisible}
-	<Modal identifier={pointIdentifier} visible={modalVisible} />
+	<Modal identifier={pointIdentifier} bind:visible={modalVisible} />
 {/if}
 <div
 	class="md:grid md:grid-cols-5 md:grid-rows-3 md:grid-flow-dense h-screen md:gap-x-6 md:gap-y-16 mx-6"
@@ -216,7 +224,8 @@
 				id="latitude"
 				name="latitude"
 				placeholder="28.582816"
-				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
+				disabled={inputsDisabled}
+				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50"
 				required
 			/>
 		</div>
@@ -229,7 +238,8 @@
 				id="longitude"
 				name="longitude"
 				placeholder="-81.339941"
-				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
+				disabled={inputsDisabled}
+				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50"
 				required
 			/>
 		</div>
@@ -242,7 +252,8 @@
 				id="radius"
 				name="radius"
 				placeholder="200"
-				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
+				disabled={inputsDisabled}
+				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50"
 				required
 			/>
 		</div>
@@ -255,7 +266,8 @@
 				id="note"
 				name="note"
 				placeholder="Known Place"
-				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
+				disabled={inputsDisabled}
+				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50"
 			/>
 		</div>
 
@@ -266,7 +278,8 @@
 				bind:value={color}
 				id="color"
 				name="color"
-				class="rounded-md shadow-sm text-sm px-3 py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500"
+				disabled={inputsDisabled}
+				class="rounded-md shadow-sm text-sm px-3 py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50"
 			/>
 		</div>
 	</form>

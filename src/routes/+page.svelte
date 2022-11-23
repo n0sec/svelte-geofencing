@@ -6,6 +6,7 @@
 	import { fade } from 'svelte/transition';
 	import Modal from '$lib/components/Modal.svelte';
 	import Map from '$lib/components/Map.svelte';
+	import { error } from '@sveltejs/kit';
 
 	/* ! VARIABLE DEFINITIONS */
 	let mapRef: SvelteComponentTyped;
@@ -66,7 +67,6 @@
 		color = '#ff0000'; // Leave this red as the default
 	}
 
-	// ?? Really not sure if an array is best here or if we can do this right from the store but ¯\_(ツ)_/¯
 	function clearAll(): void {
 		if (browser) {
 			// Clear the store
@@ -144,7 +144,7 @@
 	<Modal identifier={pointIdentifier} bind:visible={modalVisible} />
 {/if}
 <div
-	class="md:grid md:grid-cols-5 md:grid-rows-3 md:grid-flow-dense h-screen md:gap-x-6 md:gap-y-16 mx-6"
+	class="md:grid md:grid-cols-5 md:grid-rows-2 md:grid-flow-dense h-screen md:gap-x-6 md:gap-y-16 mx-6"
 >
 	<form class="col-span-1 col-start-1 row-span-1 justify-self-center">
 		<div class="rounded-md shadow-sm">
@@ -219,15 +219,17 @@
 			type="button"
 			on:click={() => addToStore({ latitude, longitude, radius, note, color })}
 			value="Plot"
-			class="bg-gray-600 rounded-lg text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-3 cursor-pointer"
+			disabled={inputsDisabled}
+			class="bg-gray-600 rounded-lg text-sm shadow-sm enabled:hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-3 cursor-pointer disabled:opacity-50"
 			>Plot</button
 		>
 		<button
 			type="button"
 			on:click={mapRef.myLocation}
 			value="My Location"
+			disabled={inputsDisabled}
 			name="myLocation"
-			class="bg-gray-600 rounded-lg text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-6 cursor-pointer"
+			class="bg-gray-600 rounded-lg text-sm shadow-sm enabled:hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-6 cursor-pointer disabled:opacity-50"
 			>My Location</button
 		>
 
@@ -235,8 +237,9 @@
 			type="button"
 			on:click={resetForm}
 			value="Reset Form"
+			disabled={inputsDisabled}
 			name="resetForm"
-			class="bg-gray-600 rounded-lg text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-6 cursor-pointer"
+			class="bg-gray-600 rounded-lg text-sm shadow-sm enabled:hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-6 cursor-pointer disabled:opacity-50"
 			>Reset Form</button
 		>
 		<button
@@ -251,8 +254,9 @@
 			type="button"
 			on:click={share}
 			value="Share"
+			disabled={inputsDisabled}
 			name="share"
-			class="bg-blue-500 rounded-lg text-sm text-center shadow-sm hover:bg-blue-600 focus:ring-blue-400 focus:ring-2 py-2.5 w-full mt-6 cursor-pointer"
+			class="bg-blue-500 rounded-lg text-sm text-center shadow-sm enabled:hover:bg-blue-600 focus:ring-blue-400 focus:ring-2 py-2.5 w-full mt-6 cursor-pointer disabled:opacity-50"
 		>
 			<svg viewBox="0 0 24 24" class="mr-2 w-4 h-4 inline" role="img"
 				><path
@@ -263,7 +267,9 @@
 		>
 	</div>
 
-	<div class="overflow-x-auto relative col-start-1 col-span-2 self-start border border-gray-400">
+	<div
+		class="overflow-x-auto relative col-start-1 col-span-2 self-start border -mt-28 border-gray-400"
+	>
 		<table class="w-full text-sm table-auto border-collapse text-left">
 			<thead class="uppercase text-xs bg-gray-600">
 				<tr>

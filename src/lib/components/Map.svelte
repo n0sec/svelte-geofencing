@@ -8,6 +8,7 @@
 	let L: typeof import('leaflet');
 
 	let mapElement: HTMLElement;
+	let errorText: string;
 
 	onMount(async () => {
 		if (browser) {
@@ -56,6 +57,13 @@
 	 */
 	export function plot(point: PlotCircle): void | string {
 		const { latitude, longitude, radius, note, color } = point;
+
+		// FIXME: This isn't properly exporting to the parent
+		if (latitude === '' || longitude === '' || radius == '') {
+			errorText =
+				'Invalid coordinates. Please enter a latitude, longitude and radius to plot a circle.';
+		}
+
 		console.log(`plot: ${point}}`);
 
 		// TODO: Return an error if any of the coordinates are missing

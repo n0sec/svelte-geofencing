@@ -2,19 +2,13 @@
 	import { browser } from '$app/environment';
 	import { createStore } from '$lib/points';
 	import type { PlotCircle } from '$lib/types/PlotCircle';
-	import type { LayerGroup } from 'leaflet';
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount, SvelteComponentTyped } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import Modal from '$lib/components/Modal.svelte';
 	import Map from '$lib/components/Map.svelte';
-	let L: typeof import('leaflet');
 
 	/* ! VARIABLE DEFINITIONS */
-
-	let map: L.Map;
-	let mapElement: HTMLElement;
-	let circleGroup: LayerGroup;
-
+	let mapRef: SvelteComponentTyped;
 	let errorVisible = false;
 	let errorText: string;
 
@@ -39,68 +33,12 @@
 
 	/***********************************************/
 
-	onMount(async () => {
-		if (browser) {
-			// Clear store on mount
-			// This means that the user will need to plot their points over again every time they visit the page
-			// This shouldn't be a huge deal since this really shouldn't be used to plot dozens or hundreds of points
-			pointStore.clear();
-			L = await import('leaflet');
-
-			let openStreetLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-				maxZoom: 19,
-				attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-			});
-
-			map = L.map(mapElement, {
-				center: [42.614689, -71.324092],
-				zoom: 15,
-				layers: [openStreetLayer]
-			});
-
-			// Create the Layer Names in UI
-			let baseMaps = {
-				'Open Street Map': openStreetLayer
-			};
-
-			L.control.layers(baseMaps).addTo(map);
-		}
+	onMount(() => {
+		// Clear store on mount
+		// This means that the user will need to plot their points over again every time they visit the page
+		// This shouldn't be a huge deal since this really shouldn't be used to plot dozens or hundreds of points
+		pointStore.clear();
 	});
-
-	onDestroy(async () => {
-		if (map) {
-			console.log('Unloading Leaflet map.');
-			map.remove();
-		}
-	});
-
-	/**
-	 * Draws a circle on the map from the entered coordinates
-	 * Sets the view to the coordinates
-	 */
-	function plot(point: PlotCircle): void | string {
-		const { latitude, longitude, radius, note, color } = point;
-		console.log(`plot: ${point}}`);
-
-		// TODO: Return an error if any of the coordinates are missing
-		// Create a group for the circles
-		// We need this so when we clear the map later of layers, we only clear this layer
-		circleGroup = L.layerGroup();
-
-		console.log(point);
-
-		// Draw the circle given the latitude, longitude, color and radius and add it to the map
-		L.circle([latitude as number, longitude as number], {
-			color: color as string,
-			radius: radius as number
-		}).addTo(circleGroup);
-
-		// Add the circle to the layer
-		map.addLayer(circleGroup);
-
-		// Set the current view to the latitude and longitude
-		map.setView([latitude as number, longitude as number]).setZoom(15);
-	}
 
 	function addToStore(point: PlotCircle) {
 		console.log(`add to store: ${point}`);
@@ -112,10 +50,10 @@
 			return;
 		}
 		const point = points[points.length - 1];
-		plot(point);
+		mapRef.plot(point);
 	}
 
-	$: browser && L && plotLatestPoint($pointStore);
+	$: browser && mapRef && plotLatestPoint($pointStore);
 
 	/**
 	 * Resets the form
@@ -133,11 +71,7 @@
 		if (browser) {
 			// Clear the store
 			pointStore.clear();
-
-			// Clear the map
-			if (map.hasLayer(circleGroup)) {
-				map.removeLayer(circleGroup);
-			}
+			mapRef.clearAll();
 		}
 
 		// Reset the form while we're at it for accessibility
@@ -145,10 +79,6 @@
 
 		// Reset the input fields to make them available again in case the user shared what they had
 		inputsDisabled = false;
-	}
-
-	function myLocation(): void {
-		map.locate({ timeout: 5000, setView: true, maxZoom: 18 }).setZoom(15);
 	}
 
 	function handleCloseError(event: any) {
@@ -294,7 +224,7 @@
 		>
 		<button
 			type="button"
-			on:click={myLocation}
+			on:click={mapRef.myLocation}
 			value="My Location"
 			name="myLocation"
 			class="bg-gray-600 rounded-lg text-sm shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-6 cursor-pointer"
@@ -368,11 +298,6 @@
 			</tbody>
 		</table>
 	</div>
-	<!-- <div
-		id="map"
-		class="overflow-hidden col-span-3 row-span-3 h-[87vh] z-10"
-		bind:this={mapElement}
-	/> -->
 
-	<Map />
+	<Map bind:this={mapRef} />
 </div>

@@ -88,7 +88,12 @@
 		}
 	}
 
-	function deletePoint() {}
+	function deletePoint(array: PlotCircle[], value: PlotCircle) {
+		let index = array.indexOf(value);
+		array = array.splice(index, 1);
+	}
+
+	function centerMap() {}
 
 	async function share() {
 		// Check if there's anything in the store
@@ -282,8 +287,8 @@
 				</tr>
 			</thead>
 			<tbody class="text-sm">
-				{#each $pointStore as { latitude, longitude, radius, note, color }}
-					<tr class="text-sm bg-gray-700 hover:bg-gray-800">
+				{#each $pointStore as { latitude, longitude, radius, note, color }, index}
+					<tr class="text-sm bg-gray-700 hover:bg-gray-800" on:click={centerMap}>
 						<td class="py-3 px-6">{latitude}</td>
 						<td class="py-3 px-6">{longitude}</td>
 						<td class="py-3 px-6">{radius}</td>

@@ -8,7 +8,8 @@
 	let L: typeof import('leaflet');
 
 	let mapElement: HTMLElement;
-	let errorText: string;
+	export let errorText: string = '';
+	export let errorVisible: boolean = false;
 
 	onMount(async () => {
 		if (browser) {
@@ -60,18 +61,15 @@
 
 		// FIXME: This isn't properly exporting to the parent
 		if (latitude === '' || longitude === '' || radius == '') {
-			errorText =
-				'Invalid coordinates. Please enter a latitude, longitude and radius to plot a circle.';
+			errorText = 'Invalid coordinates. Please enter a latitude, longitude and radius.';
+			errorVisible = true;
+			return;
 		}
-
-		console.log(`plot: ${point}}`);
 
 		// TODO: Return an error if any of the coordinates are missing
 		// Create a group for the circles
 		// We need this so when we clear the map later of layers, we only clear this layer
 		circleGroup = L.layerGroup();
-
-		console.log(point);
 
 		// Draw the circle given the latitude, longitude, color and radius and add it to the map
 		L.circle([latitude as number, longitude as number], {

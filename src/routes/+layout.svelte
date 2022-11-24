@@ -43,7 +43,7 @@
 	</nav>
 </header>
 
-<main data-sveltekit-prefetch>
+<main>
 	<slot />
 </main>
 

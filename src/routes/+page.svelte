@@ -269,6 +269,7 @@
 		>
 	</div>
 
+	<!-- * Table Component * -->
 	<div
 		class="overflow-x-auto relative col-start-1 col-span-2 self-start border -mt-28 border-gray-400"
 	>
@@ -307,5 +308,5 @@
 		</table>
 	</div>
 
-	<Map bind:this={mapRef} />
+	<Map bind:this={mapRef} bind:errorText bind:errorVisible />
 </div>

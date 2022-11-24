@@ -13,7 +13,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	// If it doesn't exist, throw a 404
 	if (!result) {
 		throw error(404, {
-			message: "Oops! Looks like that page doesn't exist!"
+			message: 'Oops! The page you are trying to access does not exist'
 		});
 	}
 

@@ -1,15 +1,23 @@
 import type { PageServerLoad } from './$types';
 import db from '$lib/server/db';
+import { error } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ params }) => {
-	try {
-		const stmt = db.prepare(`SELECT * FROM points WHERE id=(?)`);
-		const result = stmt.get(params.id);
-		console.log(result);
-		return {
-			result: result
-		};
-	} catch (err) {
-		console.log(err);
+	// Select the [id] from the db
+	// ? Verbose still prints out here
+	const stmt = db.prepare(`SELECT * FROM points WHERE id=(?)`);
+
+	// Get the row for [id]
+	const result = stmt.get(params.id);
+
+	// If it doesn't exist, throw a 404
+	if (!result) {
+		throw error(404, {
+			message: "Oops! Looks like that page doesn't exist!"
+		});
 	}
+
+	return {
+		result: result
+	};
 };

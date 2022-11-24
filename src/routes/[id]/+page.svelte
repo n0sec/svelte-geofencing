@@ -1,10 +1,14 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import Map from '$lib/components/Map.svelte';
+	import type { SvelteComponentTyped } from 'svelte';
 
 	export let data: PageData;
 
 	let points = JSON.parse(data.result.point_string);
-	console.log(typeof points);
+
+	let mapRef: SvelteComponentTyped;
+	let errorText: string;
 </script>
 
-<h1>{points}</h1>
+<Map bind:this={mapRef} />

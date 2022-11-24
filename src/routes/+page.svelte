@@ -88,10 +88,7 @@
 		}
 	}
 
-	function deletePoint(array: PlotCircle[], value: PlotCircle) {
-		let index = array.indexOf(value);
-		array = array.splice(index, 1);
-	}
+	function deletePoint() {}
 
 	function centerMap() {}
 
@@ -287,13 +284,13 @@
 				</tr>
 			</thead>
 			<tbody class="text-sm">
-				{#each $pointStore as { latitude, longitude, radius, note, color }, index}
+				{#each $pointStore as mapPoint}
 					<tr class="text-sm bg-gray-700 hover:bg-gray-800" on:click={centerMap}>
-						<td class="py-3 px-6">{latitude}</td>
-						<td class="py-3 px-6">{longitude}</td>
-						<td class="py-3 px-6">{radius}</td>
-						<td class="py-3 px-6">{note ?? 'None'}</td>
-						<td class="py-3 px-6">{color}</td>
+						<td class="py-3 px-6">{mapPoint.latitude}</td>
+						<td class="py-3 px-6">{mapPoint.longitude}</td>
+						<td class="py-3 px-6">{mapPoint.radius}</td>
+						<td class="py-3 px-6">{mapPoint.note ?? 'None'}</td>
+						<td class="py-3 px-6">{mapPoint.color}</td>
 						<td>
 							<!-- TODO: Implement on:click handler -->
 							<button class="align-middle" on:click={deletePoint}>

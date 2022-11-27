@@ -14,19 +14,17 @@
 	let map: L.Map;
 
 	onMount(async () => {
-		if (browser) {
-			const L = await import('leaflet');
+		const L = await import('leaflet');
 
-			map = L.map(mapRef as HTMLElement);
+		map = L.map(mapRef as HTMLElement);
 
-			points.forEach((point: PlotCircle) => {
-				L.circle([point.latitude as number, point.longitude as number], {
-					color: point.color as string,
-					radius: point.radius as number
-				}).addTo(map);
-				map.fitWorld();
-			});
-		}
+		points.forEach((point: PlotCircle) => {
+			L.circle([point.latitude as number, point.longitude as number], {
+				color: point.color as string,
+				radius: point.radius as number
+			}).addTo(map);
+			map.fitWorld();
+		});
 	});
 </script>
 

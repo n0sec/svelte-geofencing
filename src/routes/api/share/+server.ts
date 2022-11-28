@@ -29,11 +29,8 @@ export const POST: RequestHandler = async ({ request }) => {
 
 		// We really should never get here
 	} catch (error: any) {
-		return new Response(
-			JSON.stringify({
-				message: 'Something went wrong with the request. Please try the request again.'
-			}),
-			{ status: 500 }
-		);
+		throw error(500, {
+			message: 'Internal server error occurred. Please try again.'
+		});
 	}
 };

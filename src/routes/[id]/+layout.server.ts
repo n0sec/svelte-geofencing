@@ -1,0 +1,23 @@
+import type { LayoutServerLoad } from './$types';
+import db from '$lib/server/db';
+import { error } from '@sveltejs/kit';
+
+export const load: LayoutServerLoad = async ({ params }) => {
+	// Select the [id] from the db
+	// ? Verbose still prints out here
+	const stmt = db.prepare(`SELECT * FROM points WHERE id=(?)`);
+
+	// Get the row for [id]
+	const result = stmt.get(params.id);
+
+	// If it doesn't exist, throw a 404
+	if (!result) {
+		throw error(404, {
+			message: 'Oops! The page you are trying to access does not exist'
+		});
+	}
+
+	return {
+		result
+	};
+};

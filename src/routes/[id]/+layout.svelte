@@ -1,11 +1,11 @@
 <script lang="ts">
 	import '$lib/app.css';
-	import type { PageData } from './$types';
+	import type { LayoutData } from './$types';
 
-	export let data: PageData;
+	export let data: LayoutData;
 </script>
 
-<title>Shared Plotted Points</title>
+<title>Geolocation - {data.result.id}</title>
 
 <main>
 	<slot />

@@ -17,6 +17,9 @@ export const POST: RequestHandler = async ({ request }) => {
 	);
 	const id: string = await nanoid();
 
+	// Generate the creation_date column using Date
+	// Uses Unix time
+	// ! This will break in 2038
 	const now: number = Date.now();
 
 	try {

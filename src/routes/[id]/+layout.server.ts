@@ -1,8 +1,8 @@
-import type { PageServerLoad } from './$types';
+import type { LayoutServerLoad } from './$types';
 import db from '$lib/server/db';
 import { error } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: LayoutServerLoad = async ({ params }) => {
 	// Select the [id] from the db
 	// ? Verbose still prints out here
 	const stmt = db.prepare(`SELECT * FROM points WHERE id=(?)`);

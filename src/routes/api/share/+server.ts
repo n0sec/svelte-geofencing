@@ -13,7 +13,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	// Generate a unique identifier to match with the points
 	const nanoid = customAlphabet(
 		'1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
-		30
+		15
 	);
 	const id: string = await nanoid();
 

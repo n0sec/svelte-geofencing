@@ -110,6 +110,9 @@
 
 		pointIdentifier = await response.text();
 		modalVisible = true;
+		// ?? Do we really want to push the state to the URL?
+		// This causes the entire address bar to change to the new URL
+		// If we're presenting the ID to the user, we may not really need this
 		history.pushState(null, '', `/${pointIdentifier}`);
 
 		inputsDisabled = true;
@@ -258,7 +261,7 @@
 			value="Share"
 			disabled={inputsDisabled}
 			name="share"
-			class="bg-blue-500 rounded-lg text-sm uppercase font-medium text-center shadow-sm enabled:hover:bg-blue-600 focus:ring-blue-400 focus:ring-2 py-2.5 w-full mt-6 cursor-pointer disabled:opacity-50"
+			class="bg-blue-600 rounded-lg text-sm uppercase font-medium text-center shadow-sm enabled:hover:bg-blue-700 focus:ring-blue-400 focus:ring-2 py-2.5 w-full mt-6 cursor-pointer disabled:opacity-50"
 		>
 			<svg viewBox="0 0 24 24" class="mr-2 w-4 h-4 inline" role="img"
 				><path

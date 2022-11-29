@@ -1,11 +1,16 @@
 <script lang="ts">
 	import '$lib/app.css';
-	import type { LayoutData } from './$types';
+	import type { LayoutData, PageData } from './$types';
 
-	export let data: LayoutData;
+	export let data: PageData;
 </script>
 
-<title>Geolocation - {data.result.id}</title>
+<!-- ? Why is there an error here?-->
+{#if data.result}
+	<title>Geolocation - {data.result.id}</title>
+{:else}
+	<title>Geolocation - Error</title>
+{/if}
 
 <main>
 	<slot />

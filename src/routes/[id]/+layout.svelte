@@ -1,8 +1,8 @@
 <script lang="ts">
 	import '$lib/app.css';
-	import type { LayoutData, PageData } from './$types';
+	import type { PageData } from './$types';
 
-	export let data: LayoutData;
+	export let data: PageData;
 </script>
 
 <!-- ? error.svelte page doesn't load when using LayoutData if there's an error -->

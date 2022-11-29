@@ -50,4 +50,43 @@
 </script>
 
 <!-- <Map bind:this={mapRef} /> -->
-<div id="map" class="overflow-hidden h-screen" bind:this={mapElement} />
+<div class="grid grid-cols-2 gap-3 py-6 h-screen">
+	<!-- * Table Component * -->
+	<div class="overflow-x-auto relative col-start-1 border-gray-400">
+		<table class="w-full text-sm table-auto border-collapse border text-left">
+			<thead class="uppercase text-xs bg-gray-600">
+				<tr>
+					<th class="py-2 px-6" scope="col">Latitude</th>
+					<th class="py-2 px-6" scope="col">Longitude</th>
+					<th class="py-2 px-6" scope="col">Radius</th>
+					<th class="py-2 px-6" scope="col">Note</th>
+					<th class="py-2 px-6" scope="col">Color</th>
+					<th />
+				</tr>
+			</thead>
+			<tbody class="text-sm">
+				{#each points as mapPoint}
+					<tr class="text-sm bg-gray-700 hover:bg-gray-800">
+						<td class="py-3 px-6">{mapPoint.latitude}</td>
+						<td class="py-3 px-6">{mapPoint.longitude}</td>
+						<td class="py-3 px-6">{mapPoint.radius}</td>
+						<td class="py-3 px-6">{mapPoint.note ?? 'None'}</td>
+						<td class="py-3 px-6">{mapPoint.color}</td>
+						<td>
+							<!-- TODO: Implement on:click handler -->
+							<button class="align-middle">
+								<svg viewBox="0 0 24 24" class="fill-red-500 cursor-pointer h-5 w-5"
+									><path
+										d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6Z"
+									/></svg
+								>
+							</button></td
+						>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
+
+	<div id="map" class="overflow-hidden col-start-2" bind:this={mapElement} />
+</div>

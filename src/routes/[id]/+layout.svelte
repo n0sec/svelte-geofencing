@@ -2,14 +2,14 @@
 	import '$lib/app.css';
 	import type { LayoutData, PageData } from './$types';
 
-	export let data: PageData;
+	export let data: LayoutData;
 </script>
 
-<!-- ? Why is there an error here?-->
-{#if data.result}
-	<title>Geolocation - {data.result.id}</title>
-{:else}
+<!-- ? error.svelte page doesn't load when using LayoutData if there's an error -->
+{#if !data || data == undefined}
 	<title>Geolocation - Error</title>
+{:else}
+	<title>Geolocation - {data.result?.id}</title>
 {/if}
 
 <main>

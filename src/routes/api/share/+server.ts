@@ -17,12 +17,14 @@ export const POST: RequestHandler = async ({ request }) => {
 	);
 	const id: string = await nanoid();
 
+	const now: number = Date.now();
+
 	try {
 		// Prepare the statement
-		const stmt = db.prepare(`INSERT INTO points VALUES (?, ?)`);
+		const stmt = db.prepare(`INSERT INTO points VALUES (?, ?, ?)`);
 
 		// Run the statement
-		stmt.run(id, pointString);
+		stmt.run(id, pointString, now);
 
 		// Return a Response object with the identifier in it
 		return new Response(id);

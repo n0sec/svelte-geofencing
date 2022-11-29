@@ -69,7 +69,7 @@
 								/>
 								<!-- TODO: Implement way to indicate that the text has been selected -->
 								<button
-									class="w-auto ml-3 uppercase font-medium text-sm shadow-sm bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 px-4 py-2"
+									class="w-auto ml-3 uppercase font-medium text-sm shadow-sm bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 px-4 py-2"
 									on:click={() => copy(identifier)}>Copy</button
 								>
 							</div>
@@ -80,7 +80,7 @@
 					<button
 						type="button"
 						on:click={() => (visible = false)}
-						class="inline-flex w-full justify-center rounded-md bg-blue-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 sm:ml-3 sm:w-auto sm:text-sm"
+						class="inline-flex w-full justify-center rounded-md bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 sm:ml-3 sm:w-auto sm:text-sm"
 						>OK</button
 					>
 				</div>

@@ -6,11 +6,13 @@
 </script>
 
 <!-- ? error.svelte page doesn't load when using LayoutData if there's an error -->
-{#if !data || data == undefined}
-	<title>Geolocation - Error</title>
-{:else}
-	<title>Geolocation - {data.result?.id}</title>
-{/if}
+<svelte:head>
+	{#if !data || data == undefined}
+		<title>Geolocation - Error</title>
+	{:else}
+		<title>Geolocation - {data.result?.id}</title>
+	{/if}
+</svelte:head>
 
 <main>
 	<slot />

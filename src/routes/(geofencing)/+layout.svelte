@@ -2,8 +2,11 @@
 	import '$lib/app.css';
 </script>
 
-<header>
+<svelte:head>
 	<title>Geolocation Plotter</title>
+</svelte:head>
+
+<header>
 	<nav
 		class="bg-gray-700 drop-shadow-md px-6 mb-6 items-center align-middle justify-between flex h-14 gap-5"
 	>

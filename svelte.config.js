@@ -10,7 +10,13 @@ const config = {
 	}),
 
 	kit: {
-		adapter: adapter()
+		adapter: adapter(),
+		csp: {
+			directives: {
+				'script-src': ['self', 'unsafe-inline']
+			},
+			mode: 'auto'
+		}
 	}
 };
 

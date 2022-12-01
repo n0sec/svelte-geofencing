@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import Map from '$lib/components/Map.svelte';
 	import { onDestroy, onMount } from 'svelte';
 	import type { PlotCircle } from '$lib/types/PlotCircle';
 

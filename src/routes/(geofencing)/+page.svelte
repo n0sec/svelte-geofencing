@@ -316,6 +316,6 @@
 			</div>
 		</div>
 		{/if}
-		<!-- <Map bind:this={mapRef} bind:errorText bind:errorVisible on:maploaded={() => load = true}/>  -->
+		<Map bind:this={mapRef} bind:errorText bind:errorVisible on:maploaded={() => load = true}/>
 		<!-- on:maploaded (on load of the map, remove loading html) -->
-</div>
+ </div> 

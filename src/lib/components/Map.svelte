@@ -3,6 +3,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import type { LayerGroup } from 'leaflet';
+	import { createEventDispatcher } from 'svelte'; //import Eventdispatcher
 	let circleGroup: LayerGroup;
 	let map: L.Map;
 	let L: typeof import('leaflet');
@@ -11,7 +12,9 @@
 	export let errorText: string = '';
 	export let errorVisible: boolean = false;
 
+	const dispatch = createEventDispatcher();
 	onMount(async () => {
+		dispatch("maploaded") //dispatch 
 		if (browser) {
 			L = await import('leaflet');
 
@@ -32,7 +35,7 @@
 			};
 
 			L.control.layers(baseMaps).addTo(map);
-		}
+		}	
 	});
 
 	onDestroy(async () => {

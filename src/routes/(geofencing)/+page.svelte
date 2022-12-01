@@ -7,7 +7,7 @@
 	import Modal from '$lib/components/Modal.svelte';
 	import Map from '$lib/components/Map.svelte';
 	import { error } from '@sveltejs/kit';
-
+	
 	/* ! VARIABLE DEFINITIONS */
 	let mapRef: SvelteComponentTyped;
 	let errorVisible = false;
@@ -32,13 +32,14 @@
 		'points'
 	);
 
+	let load: boolean = false
 	/***********************************************/
 
 	onMount(() => {
 		// Clear store on mount
 		// This means that the user will need to plot their points over again every time they visit the page
 		// This shouldn't be a huge deal since this really shouldn't be used to plot dozens or hundreds of points
-		pointStore.clear();
+		pointStore.clear();	
 	});
 
 	function addToStore(point: PlotCircle) {
@@ -308,10 +309,13 @@
 			</tbody>
 		</table>
 	</div>
-	<!-- ? This doesn't seem to do anything lol -->
-	{#await onMount}
-		<p class="text-5xl text-red-500">Loading...</p>
-	{:then map}
-		<Map bind:this={mapRef} bind:errorText bind:errorVisible />
-	{/await}
+		{#if !load} <!-- load is by default false as such this renders on page load -->
+		<div class="text-5xl text-red-500 grid col-span-3 bg-white h-[850px]">
+			<div class="m-auto">
+				Loading....
+			</div>
+		</div>
+		{/if}
+		<!-- <Map bind:this={mapRef} bind:errorText bind:errorVisible on:maploaded={() => load = true}/>  -->
+		<!-- on:maploaded (on load of the map, remove loading html) -->
 </div>

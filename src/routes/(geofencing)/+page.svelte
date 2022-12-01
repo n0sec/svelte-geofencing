@@ -116,8 +116,6 @@
 		// history.pushState(null, '', `/${pointIdentifier}`);
 
 		inputsDisabled = true;
-
-		console.log(pointIdentifier);
 	}
 </script>
 
@@ -161,7 +159,7 @@
 				name="latitude"
 				placeholder="28.582816"
 				disabled={inputsDisabled}
-				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50"
+				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50 placeholder:text-slate-400"
 				required
 			/>
 		</div>
@@ -175,7 +173,7 @@
 				name="longitude"
 				placeholder="-81.339941"
 				disabled={inputsDisabled}
-				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50"
+				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50 placeholder:text-slate-400"
 				required
 			/>
 		</div>
@@ -189,7 +187,7 @@
 				name="radius"
 				placeholder="200"
 				disabled={inputsDisabled}
-				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50"
+				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50 placeholder:text-slate-400"
 				required
 			/>
 		</div>
@@ -203,7 +201,7 @@
 				name="note"
 				placeholder="Known Place"
 				disabled={inputsDisabled}
-				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50"
+				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50 placeholder:text-slate-400"
 			/>
 		</div>
 
@@ -215,7 +213,7 @@
 				id="color"
 				name="color"
 				disabled={inputsDisabled}
-				class="rounded-md shadow-sm text-sm px-3 py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50"
+				class="rounded-md shadow-sm text-sm px-3 py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50 placeholder:text-slate-400"
 			/>
 		</div>
 	</form>
@@ -310,6 +308,10 @@
 			</tbody>
 		</table>
 	</div>
-
-	<Map bind:this={mapRef} bind:errorText bind:errorVisible />
+	<!-- ? This doesn't seem to do anything lol -->
+	{#await onMount}
+		<p class="text-5xl text-red-500">Loading...</p>
+	{:then map}
+		<Map bind:this={mapRef} bind:errorText bind:errorVisible />
+	{/await}
 </div>

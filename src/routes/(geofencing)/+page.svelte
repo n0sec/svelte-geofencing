@@ -293,7 +293,10 @@
 						<td class="py-3 px-6">{mapPoint.longitude}</td>
 						<td class="py-3 px-6">{mapPoint.radius}</td>
 						<td class="py-3 px-6">{mapPoint.note ?? 'None'}</td>
-						<td class="py-3 px-6">{mapPoint.color}</td>
+						<td class="py-3 px-6"
+							><div class="w-4 h-4" style:background-color={mapPoint.color} />
+							({mapPoint.color})</td
+						>
 						<td>
 							<!-- TODO: Implement on:click handler -->
 							<button class="align-middle" on:click={deletePoint}>

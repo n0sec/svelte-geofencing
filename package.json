@@ -13,7 +13,13 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "next",
+		"@sveltejs/adapter-node": "^1.0.0-next.101",
 		"@sveltejs/kit": "next",
+		"@tailwindcss/forms": "^0.5.3",
+		"@types/better-sqlite3": "^7.6.2",
+		"@types/google.maps": "^3.50.5",
+		"@types/leaflet": "^1.9.0",
+		"@types/object-hash": "^2.2.1",
 		"@typescript-eslint/eslint-plugin": "^5.27.0",
 		"@typescript-eslint/parser": "^5.27.0",
 		"autoprefixer": "^10.4.13",
@@ -31,5 +37,14 @@
 		"typescript": "^4.7.4",
 		"vite": "^3.1.0"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@googlemaps/js-api-loader": "^1.15.1",
+		"better-sqlite3": "^7.6.2",
+		"copy-to-clipboard": "^3.3.3",
+		"hash.js": "^1.1.7",
+		"leaflet": "^1.9.3",
+		"nanoid": "^4.0.0",
+		"object-hash": "^3.0.0"
+	}
 }

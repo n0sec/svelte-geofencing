@@ -1,6 +1,11 @@
+@import 'leaflet/dist/leaflet.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+	@apply leading-relaxed;
+}
 
 body {
 	@apply bg-neutral-800 text-neutral-100;
@@ -8,7 +13,7 @@ body {
 
 html {
 	font-family: 'Roboto', sans-serif;
-	@apply h-screen;
+	height: 100%;
 }
 
 h1,
@@ -18,10 +23,26 @@ h4 {
 	@apply font-bold;
 }
 
-a {
+h1 {
+	@apply text-4xl;
+}
+
+h2 {
+	@apply text-2xl;
+}
+
+h3 {
+	@apply text-xl;
+}
+
+nav a {
 	@apply font-bold;
 }
 
-a:hover {
+a:hover :not(.button) {
 	@apply text-neutral-200;
+}
+
+section p:not(.error, .info) {
+	@apply mt-6;
 }

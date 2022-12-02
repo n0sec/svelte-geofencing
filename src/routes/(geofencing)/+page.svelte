@@ -283,7 +283,6 @@
 					<th class="py-2 px-6" scope="col">Radius</th>
 					<th class="py-2 px-6" scope="col">Note</th>
 					<th class="py-2 px-6" scope="col">Color</th>
-					<th />
 				</tr>
 			</thead>
 			<tbody class="text-sm">
@@ -296,16 +295,6 @@
 						<td class="py-3 px-6"
 							><div class="w-4 h-4" style:background-color={mapPoint.color} />
 							({mapPoint.color})</td
-						>
-						<td>
-							<!-- TODO: Implement on:click handler -->
-							<button class="align-middle" on:click={deletePoint}>
-								<svg viewBox="0 0 24 24" class="fill-red-500 cursor-pointer h-5 w-5"
-									><path
-										d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6Z"
-									/></svg
-								>
-							</button></td
 						>
 					</tr>
 				{/each}

@@ -311,7 +311,7 @@
 	</div>
 	{#if !load}
 		<!-- load is by default false as such this renders on page load -->
-		<div class="text-5xl text-red-500 grid col-span-3">
+		<div class="grid col-span-3 place-items-center">
 			<Spinner />
 		</div>
 	{/if}

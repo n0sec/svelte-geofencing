@@ -14,7 +14,7 @@
 
 	const dispatch = createEventDispatcher();
 	onMount(async () => {
-		dispatch("maploaded") //dispatch 
+		dispatch('maploaded'); //dispatch
 		if (browser) {
 			L = await import('leaflet');
 
@@ -35,7 +35,7 @@
 			};
 
 			L.control.layers(baseMaps).addTo(map);
-		}	
+		}
 	});
 
 	onDestroy(async () => {
@@ -63,28 +63,26 @@
 		const { latitude, longitude, radius, note, color } = point;
 
 		// FIXME: This isn't properly exporting to the parent
-		if (latitude === '' || longitude === '' || radius == '') {
+		if ((latitude === '' || longitude === '' || radius == '') && color !== '') {
 			errorText = 'Invalid coordinates. Please enter a latitude, longitude and radius.';
 			errorVisible = true;
-			return;
+		} else {
+			// Create a group for the circles
+			// We need this so when we clear the map later of layers, we only clear this layer
+			circleGroup = L.layerGroup();
+
+			// Draw the circle given the latitude, longitude, color and radius and add it to the map
+			L.circle([latitude as number, longitude as number], {
+				color: color as string,
+				radius: radius as number
+			}).addTo(circleGroup);
+
+			// Add the circle to the layer
+			map.addLayer(circleGroup);
+
+			// Set the current view to the latitude and longitude
+			map.setView([latitude as number, longitude as number]).setZoom(15);
 		}
-
-		// TODO: Return an error if any of the coordinates are missing
-		// Create a group for the circles
-		// We need this so when we clear the map later of layers, we only clear this layer
-		circleGroup = L.layerGroup();
-
-		// Draw the circle given the latitude, longitude, color and radius and add it to the map
-		L.circle([latitude as number, longitude as number], {
-			color: color as string,
-			radius: radius as number
-		}).addTo(circleGroup);
-
-		// Add the circle to the layer
-		map.addLayer(circleGroup);
-
-		// Set the current view to the latitude and longitude
-		map.setView([latitude as number, longitude as number]).setZoom(15);
 	}
 
 	export function myLocation(): void {
@@ -92,4 +90,8 @@
 	}
 </script>
 
-<div id="map" class="overflow-hidden col-span-3 row-span-3 h-[90vh] z-10" bind:this={mapElement} />
+<div
+	id="map"
+	class="overflow-hidden md:col-span-3 md:row-span-3 h-[90vh] z-10"
+	bind:this={mapElement}
+/>

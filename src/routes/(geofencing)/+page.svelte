@@ -148,9 +148,9 @@
 	<Modal identifier={pointIdentifier} bind:visible={modalVisible} />
 {/if}
 <div
-	class="md:grid md:grid-cols-5 md:grid-rows-2 md:grid-flow-dense h-screen md:gap-x-6 md:gap-y-16 mx-6"
+	class="flex flex-col md:grid md:grid-cols-5 md:grid-rows-2 md:grid-flow-dense md:h-screen md:gap-x-6 md:gap-y-16 mx-3"
 >
-	<form class="col-span-1 col-start-1 row-span-1 justify-self-center">
+	<form class="md:col-span-1 md:col-start-1 md:row-span-1 justify-self-center">
 		<div class="rounded-md shadow-sm">
 			<label for="latitude" class="text-sm font-medium text-gray-400 block">Latitude:</label>
 			<input
@@ -218,7 +218,7 @@
 			/>
 		</div>
 	</form>
-	<div class="col-start-2 row-span-1">
+	<div class="md:col-start-2 md:row-span-1">
 		<button
 			type="button"
 			on:click={() => addToStore({ latitude, longitude, radius, note, color })}
@@ -272,8 +272,9 @@
 	</div>
 
 	<!-- * Table Component * -->
+	<!-- ! Table does not display properly on mobile-->
 	<div
-		class="overflow-x-auto relative col-start-1 col-span-2 self-start border -mt-28 border-gray-400"
+		class="overflow-x-auto relative md:col-start-1 md:col-span-2 md:self-start border md:-mt-28 mt-6 mb-6 max-h-20 border-gray-400"
 	>
 		<table class="w-full text-sm table-auto border-collapse text-left">
 			<thead class="uppercase text-xs bg-gray-600">
@@ -283,7 +284,6 @@
 					<th class="py-2 px-6" scope="col">Radius</th>
 					<th class="py-2 px-6" scope="col">Note</th>
 					<th class="py-2 px-6" scope="col">Color</th>
-					<th />
 				</tr>
 			</thead>
 			<tbody class="text-sm">
@@ -296,16 +296,6 @@
 						<td class="py-3 px-6"
 							><div class="w-4 h-4" style:background-color={mapPoint.color} />
 							({mapPoint.color})</td
-						>
-						<td>
-							<!-- TODO: Implement on:click handler -->
-							<button class="align-middle" on:click={deletePoint}>
-								<svg viewBox="0 0 24 24" class="fill-red-500 cursor-pointer h-5 w-5"
-									><path
-										d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6Z"
-									/></svg
-								>
-							</button></td
 						>
 					</tr>
 				{/each}

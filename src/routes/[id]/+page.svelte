@@ -48,7 +48,7 @@
 	});
 </script>
 
-<div class="grid grid-cols-2 gap-3 py-6 mx-6 h-screen">
+<div class="grid grid-cols-2 gap-3 mx-6 h-screen">
 	<!-- * Table Component * -->
 	<div class="overflow-x-auto relative col-start-1 border-gray-400">
 		<table class="w-full text-sm table-auto border-collapse border text-left">
@@ -68,8 +68,12 @@
 						<td class="py-3 px-6">{mapPoint.longitude}</td>
 						<td class="py-3 px-6">{mapPoint.radius}</td>
 						<td class="py-3 px-6">{mapPoint.note ?? 'None'}</td>
-						<td class="py-3 px-6">{mapPoint.color}</td>
-					</tr>
+						<td class="py-3 px-6"
+							><div class="w-4 h-4" style:background-color={mapPoint.color} />
+							({mapPoint.color})</td
+						>
+						<td /></tr
+					>
 				{/each}
 			</tbody>
 		</table>

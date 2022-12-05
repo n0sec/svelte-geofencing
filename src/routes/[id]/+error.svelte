@@ -1,5 +1,6 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
+	import '$lib/app.css';
 </script>
 
 <div class="container mx-auto flex justify-center flex-col h-screen items-center">

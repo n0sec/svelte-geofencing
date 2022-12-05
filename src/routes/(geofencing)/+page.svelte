@@ -274,7 +274,7 @@
 	<!-- * Table Component * -->
 	<!-- ! Table does not display properly on mobile-->
 	<div
-		class="overflow-x-auto relative md:col-start-1 md:col-span-2 md:self-start border md:-mt-28 mt-6 mb-6 max-h-20 border-gray-400"
+		class="overflow-x-auto overflow-y-auto md:relative md:col-start-1 md:col-span-2 md:self-start border md:-mt-28 mt-6 mb-6 max-h-[14rem] md:max-h-[26rem] border-gray-400"
 	>
 		<table class="w-full text-sm table-auto border-collapse text-left">
 			<thead class="uppercase text-xs bg-gray-600">

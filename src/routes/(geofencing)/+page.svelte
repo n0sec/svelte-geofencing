@@ -148,9 +148,9 @@
 	<Modal identifier={pointIdentifier} bind:visible={modalVisible} />
 {/if}
 <div
-	class="md:grid md:grid-cols-5 md:grid-rows-2 md:grid-flow-dense h-screen md:gap-x-6 md:gap-y-16 mx-6"
+	class="flex flex-col md:grid md:grid-cols-5 md:grid-rows-2 md:grid-flow-dense md:h-screen md:gap-x-6 md:gap-y-16 mx-3"
 >
-	<form class="col-span-1 col-start-1 row-span-1 justify-self-center">
+	<form class="md:col-span-1 md:col-start-1 md:row-span-1 justify-self-center">
 		<div class="rounded-md shadow-sm">
 			<label for="latitude" class="text-sm font-medium text-gray-400 block">Latitude:</label>
 			<input
@@ -218,7 +218,7 @@
 			/>
 		</div>
 	</form>
-	<div class="col-start-2 row-span-1">
+	<div class="md:col-start-2 md:row-span-1">
 		<button
 			type="button"
 			on:click={() => addToStore({ latitude, longitude, radius, note, color })}
@@ -272,8 +272,9 @@
 	</div>
 
 	<!-- * Table Component * -->
+	<!-- ! Table does not display properly on mobile-->
 	<div
-		class="overflow-x-auto relative col-start-1 col-span-2 self-start border -mt-28 border-gray-400"
+		class="overflow-x-auto relative md:col-start-1 md:col-span-2 md:self-start border md:-mt-28 mt-6 mb-6 max-h-20 border-gray-400"
 	>
 		<table class="w-full text-sm table-auto border-collapse text-left">
 			<thead class="uppercase text-xs bg-gray-600">

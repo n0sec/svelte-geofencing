@@ -1,4 +1,6 @@
-<div class="px-10 md:container md:w-1/2 mx-auto justify-center align-middle pb-6">
+<div
+	class="px-10 md:container md:w-1/2 mx-auto justify-center text-sm md:text-base align-middle pb-6"
+>
 	<section>
 		<div class="about">
 			<h1 class="text-center">About This App</h1>

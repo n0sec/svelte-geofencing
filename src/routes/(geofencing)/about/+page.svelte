@@ -73,10 +73,6 @@
 				the map to that location/circle on the map.
 			</p>
 			<p>
-				The last column of each row contains a delete icon that allows you to delete that plotted
-				point if it was an error or you do not need it plotted anymore.
-			</p>
-			<p>
 				There also exists a <strong>"Share"</strong> button. This can be used to save the plotted
 				points to a database to share with Support or others. Once clicked, a dialog window will
 				open with a unique identifier for your plotted points. Provide this ID to anyone you want to

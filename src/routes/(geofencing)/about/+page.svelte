@@ -78,8 +78,7 @@
 				>
 
 				<p class="text-sm info ml-8">
-					Clicking the Share button saves all currently plotted points to a database on the server
-					and disables further interactivity.
+					Clicking the Share button disables further interactivity with the form.
 				</p>
 			</div>
 		</div>

@@ -134,8 +134,8 @@
 	class="flex flex-col md:grid md:grid-cols-5 md:grid-rows-2 md:grid-flow-dense md:gap-x-6 md:gap-y-16 mx-6"
 >
 	<form class="md:col-span-1 md:col-start-1 md:row-span-1 justify-self-center">
-		<div class="rounded-md shadow-sm">
-			<label for="latitude" class="text-sm font-medium text-gray-400 block">Latitude:</label>
+		<div class="shadow-sm">
+			<label for="latitude" class="text-sm font-medium text-gray-400 block">Latitude</label>
 			<input
 				type="number"
 				bind:value={latitude}
@@ -143,13 +143,13 @@
 				name="latitude"
 				placeholder="28.582816"
 				disabled={inputsDisabled}
-				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50 placeholder:text-slate-400"
+				class="shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50 placeholder:text-slate-400"
 				required
 			/>
 		</div>
 
-		<div class="rounded-md shadow-sm mt-3">
-			<label for="longitude" class="text-sm font-medium text-gray-400 block">Longitude:</label>
+		<div class="shadow-sm mt-3">
+			<label for="longitude" class="text-sm font-medium text-gray-400 block">Longitude</label>
 			<input
 				type="number"
 				bind:value={longitude}
@@ -157,13 +157,13 @@
 				name="longitude"
 				placeholder="-81.339941"
 				disabled={inputsDisabled}
-				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50 placeholder:text-slate-400"
+				class="shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50 placeholder:text-slate-400"
 				required
 			/>
 		</div>
 
-		<div class="rounded-md shadow-sm mt-3">
-			<label for="radius" class="text-sm font-medium text-gray-400 block">Radius:</label>
+		<div class="shadow-sm mt-3">
+			<label for="radius" class="text-sm font-medium text-gray-400 block">Radius</label>
 			<input
 				type="number"
 				bind:value={radius}
@@ -171,13 +171,13 @@
 				name="radius"
 				placeholder="200"
 				disabled={inputsDisabled}
-				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50 placeholder:text-slate-400"
+				class="shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50 placeholder:text-slate-400"
 				required
 			/>
 		</div>
 
-		<div class="rounded-md shadow-sm mt-3">
-			<label for="note" class="text-sm font-medium text-gray-400 block">Note:</label>
+		<div class="shadow-sm mt-3">
+			<label for="note" class="text-sm font-medium text-gray-400 block">Note</label>
 			<input
 				type="text"
 				bind:value={note}
@@ -185,19 +185,19 @@
 				name="note"
 				placeholder="Known Place"
 				disabled={inputsDisabled}
-				class="rounded-md shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50 placeholder:text-slate-400"
+				class="shadow-sm text-sm py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50 placeholder:text-slate-400"
 			/>
 		</div>
 
-		<div class="rounded-md shadow-sm mt-3">
-			<label for="color" class="text-sm font-medium text-gray-400 block">Color:</label>
+		<div class="shadow-sm mt-3">
+			<label for="color" class="text-sm font-medium text-gray-400 block">Color</label>
 			<input
 				type="color"
 				bind:value={color}
 				id="color"
 				name="color"
 				disabled={inputsDisabled}
-				class="rounded-md shadow-sm text-sm px-3 py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50 placeholder:text-slate-400"
+				class="shadow-sm text-sm px-3 py-1 w-full text-neutral-700 hover:ring-1 focus:ring-1 ring-gray-500 disabled:opacity-50 placeholder:text-slate-400"
 			/>
 		</div>
 	</form>
@@ -207,7 +207,7 @@
 			on:click={() => addToStore({ latitude, longitude, radius, note, color })}
 			value="Plot"
 			disabled={inputsDisabled}
-			class="bg-gray-600 rounded-lg text-sm uppercase font-bold shadow-sm enabled:hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-3 cursor-pointer disabled:opacity-50"
+			class="bg-gray-600 text-sm uppercase font-bold shadow-sm enabled:hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-3 cursor-pointer disabled:opacity-50"
 			>Plot</button
 		>
 		<button
@@ -216,7 +216,7 @@
 			value="My Location"
 			disabled={inputsDisabled}
 			name="myLocation"
-			class="bg-gray-600 rounded-lg text-sm uppercase font-bold shadow-sm enabled:hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-6 cursor-pointer disabled:opacity-50"
+			class="bg-gray-600 text-sm uppercase font-bold shadow-sm enabled:hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-6 cursor-pointer disabled:opacity-50"
 			>My Location</button
 		>
 
@@ -226,7 +226,7 @@
 			value="Reset Form"
 			disabled={inputsDisabled}
 			name="resetForm"
-			class="bg-gray-600 rounded-lg text-sm uppercase font-bold shadow-sm enabled:hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-6 cursor-pointer disabled:opacity-50"
+			class="bg-gray-600 text-sm uppercase font-bold shadow-sm enabled:hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-6 cursor-pointer disabled:opacity-50"
 			>Reset Form</button
 		>
 		<button
@@ -234,7 +234,7 @@
 			on:click={clearAll}
 			value="Clear All"
 			name="clearAll"
-			class="bg-gray-600 rounded-lg text-sm uppercase font-bold shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-6 cursor-pointer"
+			class="bg-gray-600 text-sm uppercase font-bold shadow-sm hover:bg-gray-700 focus:ring-gray-300 focus:ring-2 p-2.5 w-full mt-6 cursor-pointer"
 			>Clear All</button
 		>
 		<button
@@ -243,7 +243,7 @@
 			value="Share"
 			disabled={inputsDisabled}
 			name="share"
-			class="bg-blue-600 rounded-lg text-sm uppercase font-bold text-center shadow-sm enabled:hover:bg-blue-700 focus:ring-blue-400 focus:ring-2 py-2.5 w-full mt-6 cursor-pointer disabled:opacity-50"
+			class="bg-blue-600 text-sm uppercase font-bold text-center shadow-sm enabled:hover:bg-blue-700 focus:ring-blue-400 focus:ring-2 py-2.5 w-full mt-6 cursor-pointer disabled:opacity-50"
 		>
 			<svg viewBox="0 0 24 24" class="mr-2 w-4 h-4 inline" role="img"
 				><path

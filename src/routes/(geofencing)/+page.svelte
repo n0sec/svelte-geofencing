@@ -255,7 +255,6 @@
 	</div>
 
 	<!-- * Table Component * -->
-	<!-- ! Table does not display properly on mobile-->
 	<div
 		class="overflow-x-auto overflow-y-auto md:relative md:col-start-1 md:col-span-2 md:self-start border md:-mt-20 mt-6 mb-6 max-h-[14rem] md:max-h-[26rem] border-gray-400"
 	>

@@ -89,10 +89,6 @@
 		}
 	}
 
-	function deletePoint() {}
-
-	function centerMap() {}
-
 	async function share() {
 		// Check if there's anything in the store
 		if ($pointStore.length === 0) {
@@ -288,7 +284,7 @@
 			</thead>
 			<tbody class="text-sm">
 				{#each $pointStore as mapPoint}
-					<tr class="text-sm bg-gray-700 hover:bg-gray-800" on:click={centerMap}>
+					<tr class="text-sm bg-gray-700 hover:bg-gray-800">
 						<td class="py-3 px-6">{mapPoint.latitude}</td>
 						<td class="py-3 px-6">{mapPoint.longitude}</td>
 						<td class="py-3 px-6">{mapPoint.radius}</td>

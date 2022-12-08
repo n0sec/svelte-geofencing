@@ -12,9 +12,9 @@
 				sections.
 			</p>
 			<p>
-				Note that this app is best used to troubleshoot and plot WFD Mobile App punches and not
-				punches from a laptop or desktop. Geolocation from a laptop or desktop can be innacurate
-				depending on several factors.
+				This app is best used to troubleshoot and plot WFD Mobile App punches and not punches from a
+				laptop or desktop. Geolocation from a laptop or desktop can be innacurate depending on
+				several factors.
 			</p>
 			<div
 				class="tooltip h-auto mt-6 bg-red-600/95 border-l-4 relative items-center p-3 border-red-400/90"
@@ -38,9 +38,9 @@
 		<div class="getting-started">
 			<h1 class="mt-6 text-center">Getting Started</h1>
 			<p>
-				To get started using this app, enter the punch data into the provided inputs. The latitude
-				and longitude can be located in a Dataview that uses Geolocation columns. These can be found
-				using the "Audit" entity.
+				Enter the punch data into the provided inputs. The latitude and longitude can be located in
+				a Dataview that uses Geolocation columns. These can be found using the "Audit" entity in the
+				Data Dictionary.
 			</p>
 			<ul class="mt-6">
 				<li><code>latitude</code> (required) is the Latitude coordinate</li>
@@ -52,20 +52,19 @@
 				</li>
 				<li>
 					<code>Color</code> (optional) is a selectable color that will be used to color the plotted
-					circle. This field is optional but a color will always be selected. The default is red.
+					circle. The default is red.
 				</li>
 			</ul>
 			<p>
-				Once all required fields have been filled out, click "Plot" to draw a circle on the map with
-				your specified parameters. A table below the input fields will also be populated with the
-				data.
+				Once all required fields have been filled out, click <strong>Plot</strong> to draw a circle on
+				the map with your specified parameters. A table below the input fields will also be populated
+				with the data.
 			</p>
 			<p>
-				There also exists a <strong>"Share"</strong> button. This can be used to save the plotted
-				points to a database to share with Support or others. Once clicked, a dialog window will
-				open with a unique identifier for your plotted points. Provide this ID to anyone you want to
+				Click <strong>Share</strong> to save the plotted points. The code provided can be used to
+				share with others or Support for troubleshooting. Provide this ID to anyone you want to
 				share with. To access the plotted points, navigate to <code>[/id]</code>.
-				<strong>Share codes expire after 24 hours from creation</strong>
+				<strong>Share codes expire after 24 hours from creation</strong>.
 			</p>
 			<div
 				class="tooltip h-auto mt-6 bg-yellow-400/95 border-l-4 relative items-center p-3 border-yellow-200/90 text-gray-800"

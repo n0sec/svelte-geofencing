@@ -1,5 +1,5 @@
 <div
-	class="px-10 md:container md:w-1/2 mx-auto justify-center text-sm md:text-base align-middle pb-6"
+	class="md:px-10 md:w-1/2 md:mx-auto md:tracking-normal md:text-base mx-6 justify-center text-sm tracking-wider align-middle pb-6"
 >
 	<section>
 		<div class="about">
@@ -78,8 +78,7 @@
 				>
 
 				<p class="text-sm info ml-8">
-					Clicking the Share button saves all currently plotted points to a database on the server
-					and disables further interactivity.
+					Clicking the Share button disables further interactivity with the form.
 				</p>
 			</div>
 		</div>

@@ -82,13 +82,6 @@
 		inputsDisabled = false;
 	}
 
-	function handleCloseError(event: any) {
-		let key = event.key;
-		if (key == 'Esc') {
-			errorVisible = false;
-		}
-	}
-
 	async function share() {
 		// Check if there's anything in the store
 		if ($pointStore.length === 0) {
@@ -107,11 +100,6 @@
 
 		pointIdentifier = await response.text();
 		modalVisible = true;
-		// ?? Do we really want to push the state to the URL?
-		// This causes the entire address bar to change to the new URL
-		// If we're presenting the ID to the user, we may not really need this
-		// history.pushState(null, '', `/${pointIdentifier}`);
-
 		inputsDisabled = true;
 	}
 </script>
@@ -120,7 +108,6 @@
 	<div
 		class="error-banner pl-6 mb-6 ml-6 mr-6 h-14 bg-red-500/80 border-l-4 flex items-center justify-between border-red-400/70"
 		transition:fade={{ duration: 300 }}
-		on:keydown={handleCloseError}
 	>
 		<p class="text-sm inline-flex error">
 			<svg viewBox="0 0 24 24" class="h-5 w-5 mr-3"
@@ -144,7 +131,7 @@
 	<Modal identifier={pointIdentifier} bind:visible={modalVisible} />
 {/if}
 <div
-	class="flex flex-col md:grid md:grid-cols-5 md:grid-rows-2 md:grid-flow-dense md:h-screen md:gap-x-6 md:gap-y-16 mx-3"
+	class="flex flex-col md:grid md:grid-cols-5 md:grid-rows-2 md:grid-flow-dense md:gap-x-6 md:gap-y-16 mx-6"
 >
 	<form class="md:col-span-1 md:col-start-1 md:row-span-1 justify-self-center">
 		<div class="rounded-md shadow-sm">
@@ -270,7 +257,7 @@
 	<!-- * Table Component * -->
 	<!-- ! Table does not display properly on mobile-->
 	<div
-		class="overflow-x-auto overflow-y-auto md:relative md:col-start-1 md:col-span-2 md:self-start border md:-mt-28 mt-6 mb-6 max-h-[14rem] md:max-h-[26rem] border-gray-400"
+		class="overflow-x-auto overflow-y-auto md:relative md:col-start-1 md:col-span-2 md:self-start border md:-mt-20 mt-6 mb-6 max-h-[14rem] md:max-h-[26rem] border-gray-400"
 	>
 		<table class="w-full text-sm table-auto border-collapse text-left">
 			<thead class="uppercase text-xs bg-gray-600">

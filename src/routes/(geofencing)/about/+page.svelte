@@ -60,18 +60,6 @@
 				your specified parameters. A table below the input fields will also be populated with the
 				data.
 			</p>
-		</div>
-	</section>
-
-	<section>
-		<div class="advanced">
-			<h1 class="mt-6 text-center">Miscellaneous</h1>
-			<p>Other than just plotting points on a map, this app has other functionality.</p>
-			<p>
-				The table that displays the plotted points in rows can be interacted with to center the map
-				on the selected point. Simply hover over a table row and click anywhere in the row to center
-				the map to that location/circle on the map.
-			</p>
 			<p>
 				There also exists a <strong>"Share"</strong> button. This can be used to save the plotted
 				points to a database to share with Support or others. Once clicked, a dialog window will

@@ -60,29 +60,28 @@
 	 * Sets the view to the coordinates
 	 */
 	export function plot(point: PlotCircle): void | string {
-		const { latitude, longitude, radius, note, color } = point;
+		const { latitude, longitude, radius, color } = point;
 
 		// FIXME: This isn't properly exporting to the parent
-		if ((latitude === '' || longitude === '' || radius == '') && color !== '') {
-			errorText = 'Invalid coordinates. Please enter a latitude, longitude and radius.';
+		if (latitude === '' || longitude === '' || radius == '') {
 			errorVisible = true;
-		} else {
-			// Create a group for the circles
-			// We need this so when we clear the map later of layers, we only clear this layer
-			circleGroup = L.layerGroup();
-
-			// Draw the circle given the latitude, longitude, color and radius and add it to the map
-			L.circle([latitude as number, longitude as number], {
-				color: color as string,
-				radius: radius as number
-			}).addTo(circleGroup);
-
-			// Add the circle to the layer
-			map.addLayer(circleGroup);
-
-			// Set the current view to the latitude and longitude
-			map.setView([latitude as number, longitude as number]).setZoom(15);
+			return (errorText = 'Invalid coordinates. Please enter a latitude, longitude and radius.');
 		}
+		// Create a group for the circles
+		// We need this so when we clear the map later of layers, we only clear this layer
+		circleGroup = L.layerGroup();
+
+		// Draw the circle given the latitude, longitude, color and radius and add it to the map
+		L.circle([latitude as number, longitude as number], {
+			color: color as string,
+			radius: radius as number
+		}).addTo(circleGroup);
+
+		// Add the circle to the layer
+		map.addLayer(circleGroup);
+
+		// Set the current view to the latitude and longitude
+		map.setView([latitude as number, longitude as number]).setZoom(15);
 	}
 
 	export function myLocation(): void {

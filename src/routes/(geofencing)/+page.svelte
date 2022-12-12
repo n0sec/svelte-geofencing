@@ -255,7 +255,6 @@
 	</div>
 
 	<!-- * Table Component * -->
-	<!-- ! Table does not display properly on mobile-->
 	<div
 		class="overflow-x-auto overflow-y-auto md:relative md:col-start-1 md:col-span-2 md:self-start border md:-mt-20 mt-6 mb-6 max-h-[14rem] md:max-h-[26rem] border-gray-400"
 	>
@@ -271,16 +270,18 @@
 			</thead>
 			<tbody class="text-sm">
 				{#each $pointStore as mapPoint}
-					<tr class="text-sm bg-gray-700 hover:bg-gray-800">
-						<td class="py-3 px-6">{mapPoint.latitude}</td>
-						<td class="py-3 px-6">{mapPoint.longitude}</td>
-						<td class="py-3 px-6">{mapPoint.radius}</td>
-						<td class="py-3 px-6">{mapPoint.note ?? 'None'}</td>
-						<td class="py-3 px-6"
-							><div class="w-4 h-4" style:background-color={mapPoint.color} />
-							({mapPoint.color})</td
-						>
-					</tr>
+					{#if mapPoint.latitude != '' || mapPoint.longitude != '' || mapPoint.radius != ''}
+						<tr class="text-sm bg-gray-700 hover:bg-gray-800">
+							<td class="py-3 px-6">{mapPoint.latitude}</td>
+							<td class="py-3 px-6">{mapPoint.longitude}</td>
+							<td class="py-3 px-6">{mapPoint.radius}</td>
+							<td class="py-3 px-6">{mapPoint.note ?? 'None'}</td>
+							<td class="py-3 px-6"
+								><div class="w-4 h-4" style:background-color={mapPoint.color} />
+								({mapPoint.color})</td
+							>
+						</tr>
+					{/if}
 				{/each}
 			</tbody>
 		</table>

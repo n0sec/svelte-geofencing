@@ -2,7 +2,7 @@ import type { PageServerLoad } from './$types';
 import db from '$lib/server/db';
 import { error } from '@sveltejs/kit';
 
-const oneDay = 86400000;
+const oneWeek = 604800000;
 
 export const load: PageServerLoad = async ({ params }) => {
 	// Select the [id] from the db
@@ -22,7 +22,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	// Delete the record from the db
 	// Throw a 500 indicating that the record has been deleted
 	// Catch anything else
-	if (Date.now() - result.creation_date > oneDay) {
+	if (Date.now() - result.creation_date > oneWeek) {
 		try {
 			const deleteStmt = db.prepare(`DELETE FROM points WHERE id=(?)`);
 			deleteStmt.run(params.id);

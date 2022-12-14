@@ -24,6 +24,12 @@
 			attribution: '&copy; <a href="http://www.google.com">Google</a>'
 		});
 
+		let googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+			maxZoom: 15,
+			subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+			attribution: '&copy; <a href="http://www.google.com">Google</a>'
+		});
+
 		map = L.map(mapElement, {
 			center: [42.614689, -71.324092],
 			zoom: 15
@@ -33,7 +39,8 @@
 			.layers(
 				{
 					'Open Street Map': openStreetLayer,
-					'Google Satellite': googleSat
+					'Google Satellite': googleSat,
+					'Google Streets': googleStreets
 				},
 				undefined,
 				{
@@ -59,6 +66,14 @@
 		}
 	});
 </script>
+
+<svelte:head>
+	{#if !data || data === undefined}
+		<title>Geolocation - Error</title>
+	{:else}
+		<title>Geolocation - {data.result?.id}</title>
+	{/if}
+</svelte:head>
 
 <div class="grid grid-cols-2 gap-3 mx-6 h-screen">
 	<!-- * Table Component * -->

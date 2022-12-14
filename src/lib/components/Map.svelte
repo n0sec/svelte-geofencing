@@ -23,18 +23,30 @@
 				attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 			});
 
-			map = L.map(mapElement, {
-				center: [42.614689, -71.324092],
-				zoom: 15,
-				layers: [openStreetLayer]
+			let googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+				maxZoom: 19,
+				subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+				attribution: '&copy; <a href="http://www.google.com">Google</a>'
 			});
 
-			// Create the Layer Names in UI
-			let baseMaps = {
-				'Open Street Map': openStreetLayer
-			};
+			map = L.map(mapElement, {
+				center: [42.614689, -71.324092],
+				zoom: 15
+			});
 
-			L.control.layers(baseMaps).addTo(map);
+			L.control
+				.layers(
+					{
+						'Open Street Map': openStreetLayer,
+						'Google Satellite': googleSat
+					},
+					undefined,
+					{
+						collapsed: false
+					}
+				)
+				.addTo(map);
+			openStreetLayer.addTo(map);
 		}
 	});
 
